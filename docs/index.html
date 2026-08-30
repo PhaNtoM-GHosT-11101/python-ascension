@@ -3,280 +3,593 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python Ascension - 100 Questions</title>
+<title>Python Ascension - Solo Leveling RPG</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@600;800&display=swap');
-  :root{--bg:#0a0a0f;--card:#11111b;--card2:#181825;--border:#2a2a3a;--accent:#7c3aed;--accent2:#06b6d4;--accent3:#f59e0b;--text:#e5e7eb;--muted:#9ca3af;--success:#10b981}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;min-height:100vh}
-  .nav{position:sticky;top:0;z-index:50;background:rgba(10,10,15,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  .logo{font-family:'Orbitron',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px}
-  .logo span{color:var(--accent)}
-  .progress-wrap{flex:1;max-width:420px;margin:0 12px}
-  .progress-bg{height:8px;background:#1f1f2e;border-radius:999px;overflow:hidden}
-  .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s; border-radius:999px}
-  .progress-text{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between}
-  .container{max-width:860px;margin:0 auto;padding:24px 16px 120px}
-  .hero{text-align:center;padding:28px 12px 8px}
-  .hero h1{font-family:'Orbitron',sans-serif;font-size:28px;margin-bottom:8px}
-  .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .hero p{color:var(--muted);font-size:13px;line-height:1.6;max-width:640px;margin:0 auto}
-  .badge{display:inline-block;margin-top:10px;background:var(--card2);border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:11px;color:var(--accent2)}
-  .section{margin-top:28px;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-  .section-head{padding:16px 18px;background:linear-gradient(90deg,rgba(124,58,237,0.15),rgba(6,182,214,0.08));border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-  .section-head h2{font-family:'Orbitron',sans-serif;font-size:14px;letter-spacing:.6px}
-  .section-head span{font-size:11px;color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:999px;border:1px solid var(--border)}
-  .q{padding:18px;border-bottom:1px solid rgba(42,42,58,0.6);display:grid;gap:10px}
-  .q:last-child{border-bottom:none}
-  .q-label{display:flex;gap:10px;align-items:flex-start}
-  .q-num{min-width:32px;height:32px;display:grid;place-items:center;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0}
-  .q-text{font-size:13px;line-height:1.5;padding-top:4px}
-  .q-text em{color:var(--accent3);font-style:normal}
-  .input{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:10px;font-family:inherit;font-size:13px;outline:none;transition:border .2s, box-shadow .2s}
-  .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.2)}
-  textarea.input{min-height:84px;resize:vertical}
-  select.input{cursor:pointer}
-  .range-wrap{display:flex;align-items:center;gap:12px}
-  .range{flex:1}
-  .range-val{min-width:42px;text-align:center;background:var(--accent);color:white;padding:6px 8px;border-radius:8px;font-weight:700;font-size:13px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card2);font-size:12px;cursor:pointer;transition:all .15s}
-  .chip.active{background:var(--accent);color:white;border-color:var(--accent)}
-  .actions{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:14px 16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;z-index:40}
-  .btn{padding:12px 18px;border-radius:10px;font-family:'Orbitron',sans-serif;font-weight:600;font-size:12px;letter-spacing:.5px;cursor:pointer;border:none;transition:transform .1s, opacity .2s}
-  .btn:active{transform:scale(0.98)}
-  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white}
-  .btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border)}
-  .btn-success{background:var(--success);color:white}
-  .toast{position:fixed;top:70px;right:16px;background:var(--card2);border:1px solid var(--border);padding:12px 14px;border-radius:10px;font-size:12px;transform:translateX(400px);transition:transform .3s;z-index:60;max-width:320px}
-  .toast.show{transform:translateX(0)}
-  .export-box{display:none;margin-top:20px;background:#0f0f14;border:1px solid var(--accent);border-radius:14px;padding:18px}
-  .export-box.show{display:block}
-  .export-box h3{font-family:'Orbitron',sans-serif;font-size:13px;margin-bottom:10px;color:var(--accent2)}
-  .code{width:100%;min-height:140px;background:#000;border:1px solid var(--border);border-radius:10px;padding:12px;color:#10b981;font-size:11px;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-all;overflow:auto}
-  .hint{font-size:11px;color:var(--muted);margin-top:4px}
-  .filter{max-width:860px;margin:12px auto 0;padding:0 16px;display:flex;gap:8px;overflow-x:auto}
-  .filter button{white-space:nowrap;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:11px;cursor:pointer}
-  .filter button.active{background:var(--accent);color:white;border-color:var(--accent)}
-  @media(max-width:600px){.hero h1{font-size:20px}.nav{padding:10px 12px}}
+:root{
+  --bg:#080a12;--bg2:#0f111a;--card:#141620;--card2:#1a1d2e;--border:#24273a;
+  --accent:#7c3aed;--accent2:#06b6d4;--accent3:#f59e0b;--success:#10b981;--danger:#ef4444;
+  --text:#e5e7eb;--muted:#9aa0b2;--rank-E:#6b7280;--rank-D:#3b82f6;--rank-C:#10b981;--rank-B:#8b5cf6;--rank-A:#f59e0b;--rank-S:#ef4444;
+}
+[data-theme="anime"]{--bg:#0a0a16;--card:#15152a;--accent:#ff3b7f;--accent2:#7c3aed}
+[data-theme="pixel"]{--bg:#0f0f0f;--card:#1a1a1a;--border:#333;--accent:#facc15;--accent2:#22c55e}
+[data-theme="hacker"]{--bg:#020a02;--card:#0a1a0a;--border:#1a3a1a;--accent:#00ff41;--accent2:#00d4ff;--text:#c8f5c8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;overflow-x:hidden}
+a{color:var(--accent2)}
+/* NAV */
+.nav{position:sticky;top:0;z-index:30;background:rgba(8,10,18,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-family:'Orbitron',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px;white-space:nowrap}
+.logo span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.rank-badge{padding:6px 10px;border-radius:8px;font-family:'Orbitron',sans-serif;font-weight:800;font-size:12px;border:1px solid}
+.rank-E{background:rgba(107,114,128,0.15);color:var(--rank-E);border-color:var(--rank-E)}
+.rank-D{background:rgba(59,130,246,0.15);color:var(--rank-D);border-color:var(--rank-D)}
+.rank-C{background:rgba(16,185,129,0.15);color:var(--rank-C);border-color:var(--rank-C)}
+.rank-B{background:rgba(139,92,246,0.15);color:var(--rank-B);border-color:var(--rank-B)}
+.rank-A{background:rgba(245,158,11,0.15);color:var(--rank-A);border-color:var(--rank-A)}
+.rank-S{background:rgba(239,68,68,0.15);color:var(--rank-S);border-color:var(--rank-S);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 8px rgba(239,68,68,0.4)}50%{box-shadow:0 0 16px rgba(239,68,68,0.8)}}
+.xp-wrap{flex:1;min-width:160px;max-width:320px}
+.xp-bg{height:8px;background:#1e2030;border-radius:999px;overflow:hidden}
+.xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:32%;transition:width .4s}
+.xp-text{font-size:10px;color:var(--muted);display:flex;justify-content:space-between;margin-top:4px}
+.stats{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stat{background:var(--card2);border:1px solid var(--border);padding:6px 10px;border-radius:8px;font-size:11px;display:flex;gap:6px;align-items:center}
+.btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;border:none}
+.btn-ghost{background:transparent}
+.btn-small{padding:6px 10px;font-size:10px}
+/* LAYOUT */
+.layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:280px 1fr 300px;gap:14px;padding:14px}
+@media(max-width:1100px){.layout{grid-template-columns:260px 1fr}.right{display:none}}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.left{order:2}.right{order:3}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.card-head{padding:12px 14px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(124,58,237,0.12),rgba(6,182,214,0.06));display:flex;justify-content:space-between;align-items:center}
+.card-head h3{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:.5px}
+.scroll{max-height:calc(100vh - 180px);overflow:auto}
+@media(max-width:700px){.scroll{max-height:none}}
+/* LEFT MAP */
+.world{padding:10px 12px;border-bottom:1px solid rgba(36,39,58,0.6);cursor:pointer;transition:background .15s}
+.world:hover{background:rgba(124,58,237,0.06)}
+.world.active{background:linear-gradient(90deg,rgba(124,58,237,0.15),transparent);border-left:3px solid var(--accent)}
+.world.locked{opacity:.45;cursor:not-allowed}
+.world-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.world-title{font-weight:700;font-size:12px}
+.world-lvl{font-size:10px;background:var(--bg);border:1px solid var(--border);padding:2px 6px;border-radius:999px}
+.world-desc{font-size:10px;color:var(--muted);line-height:1.4}
+.progress-mini{height:4px;background:var(--bg2);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress-mini-bar{height:100%;background:var(--success);width:0%}
+.levels{padding:8px 10px;display:grid;gap:6px}
+.lvl{padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:11px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.lvl.active{border-color:var(--accent);background:rgba(124,58,237,0.12)}
+.lvl.done{border-color:var(--success);background:rgba(16,185,129,0.08)}
+.lvl.locked{opacity:.4;cursor:not-allowed}
+.badge{font-size:9px;padding:2px 6px;border-radius:999px;background:var(--accent);color:white}
+.badge-boss{background:var(--danger)}
+/* CENTER */
+.center{padding:14px;display:grid;gap:14px}
+.hero{padding:16px;border-radius:12px;background:linear-gradient(135deg,rgba(124,58,237,0.18),rgba(6,182,214,0.12));border:1px solid rgba(124,58,237,0.25);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hero h1{font-family:'Orbitron',sans-serif;font-size:16px}
+.hero p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.lesson{padding:14px;line-height:1.6;font-size:12.5px}
+.lesson h4{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--accent2);margin:12px 0 6px;letter-spacing:.6px}
+.lesson code{background:var(--bg2);border:1px solid var(--border);padding:2px 6px;border-radius:6px;font-size:12px}
+.lesson pre{background:#0a0a0a;border:1px solid var(--border);padding:12px;border-radius:8px;overflow:auto;margin:8px 0}
+.lesson pre code{border:none;padding:0;background:transparent}
+.battle{padding:14px}
+.battle-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.battle-title{font-weight:800;font-size:13px}
+.battle-meta{display:flex;gap:6px;flex-wrap:wrap}
+.meta{font-size:10px;padding:4px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--border)}
+.meta-xp{background:rgba(245,158,11,0.15);color:var(--accent3);border-color:rgba(245,158,11,0.3)}
+.tests{margin-top:12px;display:grid;gap:8px}
+.test{padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:11px}
+.test.ok{border-color:var(--success);background:rgba(16,185,129,0.08)}
+.test.fail{border-color:var(--danger);background:rgba(239,68,68,0.08)}
+.editor-wrap{margin-top:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.editor-bar{padding:8px 10px;background:var(--card2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+#editor{height:280px}
+@media(max-width:700px){#editor{height:240px}}
+.output{background:#050507;color:#10b981;padding:10px;font-size:11px;white-space:pre-wrap;min-height:48px;max-height:160px;overflow:auto;border-top:1px solid var(--border)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+/* RIGHT */
+.stat-line{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(36,39,58,0.4);font-size:11px}
+.stat-line span:last-child{font-weight:700;color:var(--accent2)}
+.bookmark{padding:10px 14px;border-bottom:1px solid rgba(36,39,58,0.3);font-size:11px;cursor:pointer}
+.bookmark:hover{background:rgba(124,58,237,0.06)}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+.theme{padding:10px;border-radius:8px;border:1px solid var(--border);font-size:11px;cursor:pointer;text-align:center}
+.theme.active{border-color:var(--accent);background:rgba(124,58,237,0.12)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card2);border:1px solid var(--border);padding:12px 16px;border-radius:10px;font-size:12px;z-index:50;transition:transform .3s;max-width:92vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="nav">
-  <div class="logo">PYTHON <span>ASCENSION</span> <span style="font-size:10px;color:var(--muted);font-family:monospace"> 100Q</span></div>
-  <div class="progress-wrap">
-    <div class="progress-bg"><div class="progress-bar" id="progressBar"></div></div>
-    <div class="progress-text"><span id="progressText">0 / 100 answered</span><span id="percent">0%</span></div>
+  <div class="logo">PYTHON <span>ASCENSION</span></div>
+  <div id="rankBadge" class="rank-badge rank-E">RANK E</div>
+  <div class="xp-wrap">
+    <div class="xp-bg"><div id="xpBar" class="xp-bar"></div></div>
+    <div class="xp-text"><span id="xpText">0 / 100 XP</span><span id="lvlText">LVL 1</span></div>
   </div>
-  <div style="display:flex;gap:8px">
-    <button class="btn btn-ghost" style="padding:8px 12px;font-size:11px" onclick="saveAll()">💾 Save</button>
-    <button class="btn btn-ghost" style="padding:8px 12px;font-size:11px" onclick="loadDemo()">Demo</button>
+  <div class="stats">
+    <div class="stat">🔥 <span id="streak">Streak 1</span></div>
+    <div class="stat">⚔️ <span id="solved">0/500</span></div>
+    <button class="btn btn-small" id="musicBtn" onclick="toggleMusic()">🎵 Lo-fi: OFF</button>
+    <button class="btn btn-small" onclick="resetProgress()">Reset</button>
   </div>
 </div>
-<div class="container">
-  <div class="hero">
-    <h1>Become the <span>GREATEST</span> Python Dev</h1>
-    <p>Answer 100 questions. I will build your personal RPG game that covers <b>every</b> Python topic from basics to AI, tailored to your dopamine and job goals. Auto-saves locally.</p>
-    <div class="badge">⚡ 100% interactive • takes 7-10 min • auto-saves</div>
+
+<div class="layout">
+  <div class="card left">
+    <div class="card-head"><h3>WORLD MAP</h3><span style="font-size:10px;color:var(--muted)" id="worldCount">11 Worlds</span></div>
+    <div class="scroll" id="worldList"></div>
   </div>
-  <div class="filter" id="filter"></div>
-  <div id="sections"></div>
-  <div class="export-box" id="exportBox">
-    <h3>✅ Answers Ready - Copy & Send to AI</h3>
-    <p class="hint" style="margin-bottom:10px">Copy this JSON and paste it back in the chat. Or copy the shareable link.</p>
-    <div class="code" id="exportCode"></div>
-    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-      <button class="btn btn-success" onclick="copyExport()">📋 Copy JSON</button>
-      <button class="btn btn-primary" onclick="copyLink()">🔗 Copy Share Link</button>
-      <button class="btn btn-ghost" onclick="downloadJSON()">⬇️ Download .json</button>
-      <button class="btn btn-ghost" onclick="copyMarkdown()">Copy Markdown</button>
+
+  <div class="center">
+    <div class="hero">
+      <div>
+        <h1 id="heroTitle">Welcome, Hunter</h1>
+        <p id="heroDesc">Your Solo Leveling begins. Clear World 1 to rank up. Every battle gives XP. Fail = auto-bookmark to Revise Dungeon.</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-primary" onclick="scrollToBattle()">⚔️ BATTLE</button>
+        <button class="btn" onclick="showRevise()">📚 Revise</button>
+      </div>
     </div>
-    <div id="shareLink" class="code" style="min-height:60px;margin-top:12px;display:none;word-break:break-all"></div>
-    <p class="hint" style="margin-top:10px">After copying, paste it here in chat and I will instantly build your game.</p>
+
+    <div class="card" id="lessonCard">
+      <div class="card-head"><h3 id="lessonTitle">Lesson</h3><span style="font-size:10px;color:var(--muted)" id="lessonMeta">2 min</span></div>
+      <div class="lesson" id="lessonBody">Loading...</div>
+    </div>
+
+    <div class="card" id="battleCard">
+      <div class="card-head"><h3 id="battleTitle">Code Battle</h3><span id="battleXp" class="badge">+20 XP</span></div>
+      <div class="battle">
+        <div class="battle-head">
+          <div>
+            <div id="battleDesc" style="font-size:12px;line-height:1.5;color:var(--muted)">Select a battle</div>
+            <div class="battle-meta" style="margin-top:8px" id="battleMeta"></div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-small" onclick="getHint()">💡 Hint (-5 XP)</button>
+            <button class="btn btn-small" onclick="bookmarkCurrent()">🔖 Bookmark</button>
+          </div>
+        </div>
+        <div class="tests" id="tests"></div>
+        <div class="editor-wrap">
+          <div class="editor-bar">
+            <span style="font-size:11px;font-weight:600">editor.py</span>
+            <span style="display:flex;gap:6px;align-items:center">
+              <label style="font-size:11px;display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="vimToggle" onchange="toggleVim()"> VIM</label>
+              <button class="btn btn-small" onclick="resetCode()">Reset</button>
+              <button class="btn btn-small" onclick="runCode()">▶ Run</button>
+              <button class="btn btn-primary btn-small" onclick="submitCode()">⚡ Submit</button>
+            </span>
+          </div>
+          <div id="editor"></div>
+          <div id="output" class="output">Output will appear here... (Pyodide loads in 3 sec)</div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="prevBattle()">← Prev</button>
+          <button class="btn btn-primary" onclick="nextBattle()">Next →</button>
+          <span style="font-size:11px;color:var(--muted);align-self:center" id="autoHint">Fail 3x to unlock resource + auto-revise</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:12px;font-size:11px;color:var(--muted);text-align:center">
+      Built for you • 500+ battles A-Z • Python + DSA (FAANG) + AI + System Design • No lag • Made for 15 min daily grind • <a href="https://github.com/PhaNtoM-GHosT-11101/python-ascension" target="_blank">GitHub</a>
+    </div>
+  </div>
+
+  <div class="card right">
+    <div class="card-head"><h3>HUNTER STATS</h3></div>
+    <div class="stat-line"><span>Rank</span><span id="statRank">E</span></div>
+    <div class="stat-line"><span>Level</span><span id="statLvl">1</span></div>
+    <div class="stat-line"><span>XP</span><span id="statXp">0</span></div>
+    <div class="stat-line"><span>Battles Won</span><span id="statWon">0 / 500</span></div>
+    <div class="stat-line"><span>Streak</span><span id="statStreak">1 day</span></div>
+    <div class="stat-line"><span>Bookmarks</span><span id="statBookmarks">0</span></div>
+
+    <div class="card-head" style="margin-top:8px"><h3>REVISE DUNGEON</h3><span style="font-size:10px;color:var(--danger)" id="reviseCount">0 due</span></div>
+    <div id="reviseList" style="max-height:160px;overflow:auto"></div>
+
+    <div class="card-head" style="margin-top:8px"><h3>THEMES (no lag)</h3></div>
+    <div class="theme-grid">
+      <div class="theme active" onclick="setTheme('default')">🌑 Dark</div>
+      <div class="theme" onclick="setTheme('anime')">🌸 Anime</div>
+      <div class="theme" onclick="setTheme('pixel')">👾 Pixel</div>
+      <div class="theme" onclick="setTheme('hacker')">💚 Hacker</div>
+    </div>
+
+    <div class="card-head"><h3>LOOT</h3></div>
+    <div id="loot" style="padding:10px;font-size:11px;line-height:1.6">Win battles to evolve your shadow pet 🐺<br>Rank D: Shadow Wolf<br>Rank B: Shadow Dragon<br>Rank S: Monarch</div>
   </div>
 </div>
-<div class="actions">
-  <button class="btn btn-ghost" onclick="scrollToUnanswered()">⚠️ Find Unanswered</button>
-  <button class="btn btn-primary" onclick="exportAnswers()">🚀 Submit & Get Game</button>
-</div>
-<div class="toast" id="toast"></div>
+
+<div id="toast" class="toast"></div>
+<audio id="lofi" loop preload="none" src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_fbd14dd6bc.mp3?filename=lofi-study-112191.mp3"></audio>
+
 <script>
-const questions = 
-[{"id": 1, "text": "What is your name / gamer tag?", "type": "text", "placeholder": "e.g. Shadow", "section": "About You & Focus"}, {"id": 2, "text": "Age?", "type": "number", "placeholder": "e.g. 20", "section": "About You & Focus"}, {"id": 3, "text": "Current Python level?", "type": "select", "options": ["Absolute beginner", "Know basics", "Intermediate - can build projects", "Advanced - but want to master everything"], "section": "About You & Focus"}, {"id": 4, "text": "Hours you can play if it's FUN per day?", "type": "select", "options": ["<1 hour", "1-2 hours", "3-4 hours", "5+ hours - no limit if fun"], "section": "About You & Focus"}, {"id": 5, "text": "Best time to study?", "type": "select", "options": ["Morning", "Afternoon", "Night", "Late night 12-4am"], "section": "About You & Focus"}, {"id": 6, "text": "What kills your focus most?", "type": "select", "options": ["Instagram/Reels", "Overthinking", "Boring theory", "No instant result", "Laziness / low energy"], "section": "About You & Focus"}, {"id": 7, "text": "What gives you dopamine fastest?", "type": "select", "options": ["Winning / leveling up", "Solving hard puzzle", "Story + characters", "Competition / leaderboard", "Loot / collection"], "section": "About You & Focus"}, {"id": 8, "text": "Do you have ADHD / diagnosed concentration issue or just feel it?", "type": "select", "options": ["Yes diagnosed", "Not diagnosed but feels like it", "No - just lazy/distracted", "Don't know"], "section": "About You & Focus"}, {"id": 9, "text": "Have you ever completed a long course before? Which one?", "type": "text", "placeholder": "e.g. no, left mid-way", "section": "About You & Focus"}, {"id": 10, "text": "Why do you want to be GREATEST python dev? Deep reason?", "type": "textarea", "placeholder": "money, prove yourself, love coding...", "section": "About You & Focus"}, {"id": 11, "text": "What happens if you don't achieve this in 1 year?", "type": "text", "placeholder": "your fear", "section": "About You & Focus"}, {"id": 12, "text": "On scale 1-10 how serious are you right now?", "type": "range", "placeholder": "1-10", "section": "About You & Focus"}, {"id": 13, "text": "Favorite Theme / Universe?", "type": "select", "options": ["Solo Leveling (level up)", "Naruto / Anime", "Cyberpunk / Hacker", "Dark Souls / Elden Ring", "Sci-Fi Space", "Fantasy RPG", "Minimal Hacker Terminal"], "section": "Game Soul - Vibe"}, {"id": 14, "text": "Game vibe you want?", "type": "select", "options": ["Dark + Serious + Epic", "Colorful + Fun + Anime", "Clean + Minimal + Pro", "Retro Pixel 8-bit"], "section": "Game Soul - Vibe"}, {"id": 15, "text": "Story + dialogue or straight to code?", "type": "select", "options": ["Full story with NPCs", "Little story - keep it light", "No story - just battles"], "section": "Game Soul - Vibe"}, {"id": 16, "text": "Character progression style?", "type": "select", "options": ["Rank E -> S (Solo Leveling)", "Level 1-100", "Belts (white -> black)", "No levels - just worlds"], "section": "Game Soul - Vibe"}, {"id": 17, "text": "World structure?", "type": "select", "options": ["Linear 1->50 levels", "Open world map to explore", "Both - linear + side quests"], "section": "Game Soul - Vibe"}, {"id": 18, "text": "Do you want Boss Fights every 5 levels?", "type": "select", "options": ["Yes - hard boss to unlock next world", "No - keep flow smooth", "Yes but optional"], "section": "Game Soul - Vibe"}, {"id": 19, "text": "Penalty on fail?", "type": "select", "options": ["Lose HP / Retry", "Lose XP / Rank down", "No penalty - just try again", "Hardcore - restart world"], "section": "Game Soul - Vibe"}, {"id": 20, "text": "Loot system?", "type": "select", "options": ["Yes - swords, armor, titles", "Yes - but subtle (badges)", "No - keep simple"], "section": "Game Soul - Vibe"}, {"id": 21, "text": "Want Pets / Companions?", "type": "select", "options": ["Yes - pet that evolves", "No"], "section": "Game Soul - Vibe"}, {"id": 22, "text": "Sound & music?", "type": "select", "options": ["Yes - epic music + SFX", "SFX only", "Silent"], "section": "Game Soul - Vibe"}, {"id": 23, "text": "Streak system like Duolingo?", "type": "select", "options": ["Yes - punish if break", "Yes - but forgiving 1 freeze/week", "No streaks"], "section": "Game Soul - Vibe"}, {"id": 24, "text": "Daily quests + Weekly challenges?", "type": "select", "options": ["Yes", "No - just main quest"], "section": "Game Soul - Vibe"}, {"id": 25, "text": "Leaderboard / PvP?", "type": "select", "options": ["Global leaderboard", "Friends only", "Solo only - no pressure"], "section": "Game Soul - Vibe"}, {"id": 26, "text": "Multiplayer co-op?", "type": "select", "options": ["Yes want co-op", "No solo"], "section": "Game Soul - Vibe"}, {"id": 27, "text": "How long should one level take?", "type": "select", "options": ["5 min", "10-15 min", "20-30 min", "45+ min deep"], "section": "Game Soul - Vibe"}, {"id": 28, "text": "What will make you ADDICTED to open it daily?", "type": "textarea", "placeholder": "what keeps you coming back?", "section": "Game Soul - Vibe"}, {"id": 29, "text": "Lesson length before code?", "type": "select", "options": ["30 sec - just hint", "2 min quick", "5 min deep", "No lesson - just problem"], "section": "Learning Engine"}, {"id": 30, "text": "Lesson format?", "type": "select", "options": ["Text + code + diagram", "Video embedded", "Interactive - run code while reading", "Comic / story style"], "section": "Learning Engine"}, {"id": 31, "text": "How many questions per lesson to unlock next?", "type": "select", "options": ["3", "5", "7", "10"], "section": "Learning Engine"}, {"id": 32, "text": "Question types mix?", "type": "select", "options": ["Only write code from scratch", "Mix - MCQ + Debug + Write", "Debug existing code", "Fill in blanks at start"], "section": "Learning Engine"}, {"id": 33, "text": "Difficulty curve?", "type": "select", "options": ["Slow - very gradual", "Medium", "Hard - jump fast", "Adaptive - AI adjusts to me"], "section": "Learning Engine"}, {"id": 34, "text": "Hints?", "type": "select", "options": ["AI hint without giving answer", "Show solution after 3 fails", "No hints - struggle", "Buy hints with XP"], "section": "Learning Engine"}, {"id": 35, "text": "Explanations after solving?", "type": "select", "options": ["Detailed - why it works", "Short", "Show best 3 solutions", "Video explain"], "section": "Learning Engine"}, {"id": 36, "text": "Do you want typing practice / speed?", "type": "select", "options": ["Yes", "No"], "section": "Learning Engine"}, {"id": 37, "text": "Language - Explain like I'm 5 or like a dev?", "type": "select", "options": ["ELI5 - super simple", "Balanced", "Pro - deep technical"], "section": "Learning Engine"}, {"id": 38, "text": "Revision / Spaced Repetition?", "type": "select", "options": ["Yes - bring old questions back", "No"], "section": "Learning Engine"}, {"id": 39, "text": "Want notes / cheatsheet auto-generated per world?", "type": "select", "options": ["Yes", "No"], "section": "Learning Engine"}, {"id": 40, "text": "Certificate / proof after each world?", "type": "select", "options": ["Yes - shareable", "No need"], "section": "Learning Engine"}, {"id": 41, "text": "Which basics you already mastered? tick", "type": "textarea", "placeholder": "variables, loops, functions, lists/dicts...", "section": "Python Core - Foundations"}, {"id": 42, "text": "Which basics you still confuse?", "type": "textarea", "placeholder": "e.g. recursion, slicing...", "section": "Python Core - Foundations"}, {"id": 43, "text": "Want tricky Python puzzles? (like [[]]*3 trap)", "type": "select", "options": ["Yes love them", "Sometimes", "No - keep practical"], "section": "Python Core - Foundations"}, {"id": 44, "text": "File handling importance?", "type": "select", "options": ["Must cover deep", "Basic is enough", "Skip"], "section": "Python Core - Foundations"}, {"id": 45, "text": "Error handling / debugging deep?", "type": "select", "options": ["Yes deep", "Basic", "Skip"], "section": "Python Core - Foundations"}, {"id": 46, "text": "Want Python internals? (GIL, memory, CPython)", "type": "select", "options": ["Yes - want greatest level", "No - too deep", "Later"], "section": "Python Core - Foundations"}, {"id": 47, "text": "Regex - include?", "type": "select", "options": ["Yes", "No", "Basic only"], "section": "Python Core - Foundations"}, {"id": 48, "text": "Want typing / type hints + mypy?", "type": "select", "options": ["Yes", "No"], "section": "Python Core - Foundations"}, {"id": 49, "text": "How do you want to practice basics - mini-games?", "type": "select", "options": ["Yes - game per concept", "Just problems"], "section": "Python Core - Foundations"}, {"id": 50, "text": "Project after basics? e.g. CLI To-Do or Scraper", "type": "select", "options": ["CLI Apps", "Automation scripts", "Games with Pygame", "Web mini apps"], "section": "Python Core - Foundations"}, {"id": 51, "text": "Do you want to master Pythonic style (one-liners, comprehensions)?", "type": "select", "options": ["Yes - be pythonic", "No - readable first"], "section": "Python Core - Foundations"}, {"id": 52, "text": "Want to cover Python 3.12+ features (match/case, walrus)?", "type": "select", "options": ["Yes latest", "No - stable only"], "section": "Python Core - Foundations"}, {"id": 53, "text": "How to test basics - output check or unit tests?", "type": "select", "options": ["Output check", "Unit tests (pytest) like real job", "Both"], "section": "Python Core - Foundations"}, {"id": 54, "text": "Favorite basic concept?", "type": "text", "placeholder": "", "section": "Python Core - Foundations"}, {"id": 55, "text": "Most hated basic concept?", "type": "text", "placeholder": "", "section": "Python Core - Foundations"}, {"id": 56, "text": "OOP depth?", "type": "select", "options": ["All - magic methods, metaclasses", "Medium - classes + inheritance", "Basic - just classes"], "section": "Python Advanced"}, {"id": 57, "text": "Decorators / Generators / Context Managers - deep?", "type": "select", "options": ["Yes master it", "Overview only"], "section": "Python Advanced"}, {"id": 58, "text": "Async / Threading / Multiprocessing - include?", "type": "select", "options": ["Yes - all async", "Only async/await", "Skip - too hard"], "section": "Python Advanced"}, {"id": 59, "text": "Want Design Patterns in Python?", "type": "select", "options": ["Yes - singleton, factory etc", "No"], "section": "Python Advanced"}, {"id": 60, "text": "Want to build own decorators / iterators / frameworks?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 61, "text": "Testing - pytest, mock, coverage?", "type": "select", "options": ["Yes deep", "Basic", "Skip"], "section": "Python Advanced"}, {"id": 62, "text": "Packaging - pip, venv, poetry, publishing?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 63, "text": "Performance - cProfile, optimization, Cython?", "type": "select", "options": ["Yes", "No", "Later"], "section": "Python Advanced"}, {"id": 64, "text": "Want to read real Python open-source code inside game?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 65, "text": "Security / Hacking with Python?", "type": "select", "options": ["Yes include", "No"], "section": "Python Advanced"}, {"id": 66, "text": "Automation - bots, selenium, OS scripting?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 67, "text": "Web - FastAPI / Django?", "type": "select", "options": ["FastAPI (modern)", "Django (full)", "Flask (simple)", "No web"], "section": "Python Advanced"}, {"id": 68, "text": "Databases - SQL, SQLAlchemy, Redis?", "type": "select", "options": ["Yes deep", "Basic SQL only", "No"], "section": "Python Advanced"}, {"id": 69, "text": "Want Docker + Git + Linux + Deploy?", "type": "select", "options": ["Yes - full dev", "Basic git only", "No"], "section": "Python Advanced"}, {"id": 70, "text": "Which advanced topic scares you most?", "type": "text", "placeholder": "", "section": "Python Advanced"}, {"id": 71, "text": "DSA level now?", "type": "select", "options": ["Zero", "Can do easy", "Medium", "Can do hard"], "section": "DSA Path"}, {"id": 72, "text": "DSA goal?", "type": "select", "options": ["FAANG crack", "Job ready", "Just good logic", "Competitive programming"], "section": "DSA Path"}, {"id": 73, "text": "Want DSA inside Python game or separate track?", "type": "select", "options": ["Inside same game as worlds", "Separate DSA dungeon"], "section": "DSA Path"}, {"id": 74, "text": "Want DSA theory or just Python code?", "type": "select", "options": ["Theory + code", "Only code"], "section": "DSA Path"}, {"id": 75, "text": "Which DSA you hate / stuck on?", "type": "textarea", "placeholder": "e.g. DP, graphs...", "section": "DSA Path"}, {"id": 76, "text": "Want daily DSA challenge like LeetCode streak?", "type": "select", "options": ["Yes", "No"], "section": "DSA Path"}, {"id": 77, "text": "Want visualizations for DSA (trees, graphs)?", "type": "select", "options": ["Yes must", "No"], "section": "DSA Path"}, {"id": 78, "text": "Time complexity - want to master Big O?", "type": "select", "options": ["Yes deep", "Basic", "No"], "section": "DSA Path"}, {"id": 79, "text": "Want company-wise DSA (Google, Amazon patterns)?", "type": "select", "options": ["Yes", "No - just topics"], "section": "DSA Path"}, {"id": 80, "text": "Want mock interviews inside game?", "type": "select", "options": ["Yes", "No"], "section": "DSA Path"}, {"id": 81, "text": "How many DSA questions total you want? 50, 200, 500?", "type": "select", "options": ["50", "150", "300", "500+"], "section": "DSA Path"}, {"id": 82, "text": "DSA difficulty mix?", "type": "select", "options": ["Many easy -> few hard", "Balanced", "Most hard - brutal"], "section": "DSA Path"}, {"id": 83, "text": "AI goal?", "type": "select", "options": ["Build AI apps (use APIs)", "ML from scratch (numpy/pandas)", "Deep Learning (pytorch)", "All of above - become AI engineer"], "section": "AI & Career"}, {"id": 84, "text": "Want to use OpenAI API + LangChain + RAG?", "type": "select", "options": ["Yes", "No"], "section": "AI & Career"}, {"id": 85, "text": "Want AI projects inside game?", "type": "select", "options": ["Chatbot", "Image gen", "Data analysis", "All"], "section": "AI & Career"}, {"id": 86, "text": "Math for AI - want to cover?", "type": "select", "options": ["Yes - linear algebra, stats", "No - just code"], "section": "AI & Career"}, {"id": 87, "text": "Numpy / Pandas depth?", "type": "select", "options": ["Master", "Basic", "Skip"], "section": "AI & Career"}, {"id": 88, "text": "Job you want?", "type": "select", "options": ["Python Backend Dev", "AI/ML Engineer", "Fullstack Python", "Freelance / Startup", "Still exploring"], "section": "AI & Career"}, {"id": 89, "text": "Timeline to get job?", "type": "select", "options": ["1 month", "3 months", "6 months", "1 year"], "section": "AI & Career"}, {"id": 90, "text": "Do you want resume projects from this game?", "type": "select", "options": ["Yes - auto portfolio", "No"], "section": "AI & Career"}, {"id": 91, "text": "Want interview prep (HR + technical) inside game?", "type": "select", "options": ["Yes", "No"], "section": "AI & Career"}, {"id": 92, "text": "Dream company?", "type": "text", "placeholder": "e.g. Google, startup...", "section": "AI & Career"}, {"id": 93, "text": "Want web code to be visible on GitHub for recruiters?", "type": "select", "options": ["Yes - make it pro", "Hide - just for me"], "section": "Final - Tech & Vision"}, {"id": 94, "text": "Do you know React / HTML-CSS?", "type": "select", "options": ["Yes", "A bit", "No - only Python"], "section": "Final - Tech & Vision"}, {"id": 95, "text": "Should game work on mobile?", "type": "select", "options": ["Must - phone first", "Nice to have", "Desktop only"], "section": "Final - Tech & Vision"}, {"id": 96, "text": "Dark mode or Light mode default?", "type": "select", "options": ["Dark - hacker", "Light - clean", "Both toggle"], "section": "Final - Tech & Vision"}, {"id": 97, "text": "Want offline mode?", "type": "select", "options": ["Yes", "No"], "section": "Final - Tech & Vision"}, {"id": 98, "text": "Should I add real Python cert at the end you can share on LinkedIn?", "type": "select", "options": ["Yes", "No"], "section": "Final - Tech & Vision"}, {"id": 99, "text": "Repo should be public pro - want README + demo + live link?", "type": "select", "options": ["Yes make it viral", "Keep simple"], "section": "Final - Tech & Vision"}, {"id": 100, "text": "In one line: What will make you say THIS is the GREATEST Python game ever?", "type": "textarea", "placeholder": "your vision", "section": "Final - Tech & Vision"}];
-const sectionsOrder = [...new Set(questions.map(q=>q.section))];
+// ---------- DATA: 11 Worlds A-Z ----------
+const worlds = [
+  {
+    id:'w1', title:'World 1: Genesis', desc:'Variables, Types, Input/Output', icon:'🌱', levels:[
+      {id:'w1l1', title:'Lvl 1 - Mana Crystals (Variables)', type:'lesson', xp:20, lessonTitle:'Variables', time:'2 min', lesson:`
+      <p><b>Variables</b> are mana crystals that store value.</p>
+      <pre><code>x = 10
+name = "Shadow"
+print(x)</code></pre>
+      <h4>💡 Trick</h4><p><code>a = [[]]*3</code> creates 3 refs to SAME list - trap!</p>
+      <h4>Forgetting Curve</h4><p>Fail this battle → auto-bookmark + revise tomorrow.</p>
+      `, battles:[
+        {id:'w1l1b1', title:'Summon Variable', type:'write', xp:20, desc:'Create variable <code>a = 10</code> and print it.', starter:`# create a = 10 and print(a)\n`, hint:'Use a = 10 on line1, print(a) on line2', resource:'https://docs.python.org/3/tutorial/introduction.html', tests:[{input:'', expected:'10\n', vis:true}], solution:`a=10\nprint(a)`},
+        {id:'w1l1b2', title:'Debug: Broken Spell', type:'debug', xp:25, desc:'Fix this code - it should print 25', starter:`x = "5"\ny = 5\nprint(x + y)  # fix this\n`, hint:'One is string "5", convert with int()', resource:'https://docs.python.org/3/library/functions.html#int', tests:[{expected:'10\n', vis:true}], solution:`x = "5"\ny = 5\nprint(int(x) + y)`},
+        {id:'w1l1b3', title:'Fill the Blank', type:'fill', xp:20, desc:'Complete to print <code>Hi Shadow</code>', starter:`name = ___\nprint(f"Hi {name}")\n`, hint:`name = "Shadow"`, resource:'https://docs.python.org/3/tutorial/inputoutput.html', tests:[{expected:'Hi Shadow\n', vis:true}], solution:`name = "Shadow"\nprint(f"Hi {name}")`},
+        {id:'w1l1b4', title:'Input Gate', type:'write', xp:30, desc:'Read integer n and print n*2. (We test with input 7 -> 14)', starter:`# read n\n# print n*2\n`, hint:'n = int(input()) then print(n*2)', resource:'https://docs.python.org/3/library/functions.html#input', tests:[{input:'7\n', expected:'14\n', vis:true},{input:'0\n', expected:'0\n', vis:false}], solution:`n=int(input())\nprint(n*2)`},
+        {id:'w1l1b5', title:'Boss: Type Alchemist', type:'write', xp:50, desc:'Given input string s, print its length and type name (e.g. input "hi" -> "2 str"). We pass "hello" -> "5 str" and "123" -> "3 str"', starter:`s = input()\n# print f"{len(s)} {type(s).__name__}"\n`, hint:'print(f"{len(s)} {type(s).__name__}")', resource:'https://docs.python.org/3/library/functions.html#type', tests:[{input:'hello\n', expected:'5 str\n', vis:true},{input:'123\n', expected:'3 str\n', vis:false}], solution:`s=input()\nprint(f"{len(s)} {type(s).__name__}")`}
+      ]},
+      {id:'w1l2', title:'Lvl 2 - Data Runes', type:'lesson', xp:25, battles:[
+        {id:'w1l2b1', title:'List Slice Trap', type:'write', xp:30, desc:'Create list a=[1,2,3] and print a[1:3] -> should be [2, 3]', starter:`a=[1,2,3]\n# print slice\n`, hint:'print(a[1:3])', resource:'https://docs.python.org/3/tutorial/introduction.html#lists', tests:[{expected:'[2, 3]\n', vis:true}], solution:`a=[1,2,3]\nprint(a[1:3])`}
+      ]}
+    ]
+  },
+  {id:'w2', title:'World 2: Logic Gate', desc:'If/Else, Loops, Comprehensions', icon:'🔀', levels:[
+    {id:'w2l1', title:'Lvl 6 - Branching', type:'lesson', lesson:`<p>if/else, for, while, list comprehensions</p><pre><code># pythonic
+[x*2 for x in range(5) if x%2==0]</code></pre>`, battles:[
+      {id:'w2l1b1', title:'FizzBuzz Mini', type:'write', xp:30, desc:'Read n, print Fizz if div3, Buzz if div5, FizzBuzz if both, else n. Test n=15 -> FizzBuzz', starter:`n=int(input())\n# fizzbuzz\n`, hint:'if n%15==0:', tests:[{input:'15\n', expected:'FizzBuzz\n', vis:true},{input:'9\n', expected:'Fizz\n', vis:false}], solution:`n=int(input())\nif n%15==0: print("FizzBuzz")\nelif n%3==0: print("Fizz")\nelif n%5==0: print("Buzz")\nelse: print(n)`}
+    ]}
+  ]},
+  {id:'w3', title:'World 3: Function Forge', desc:'Functions, Recursion, Lambdas', icon:'🔧', levels:[]},
+  {id:'w4', title:'World 4: Data Dungeon', desc:'Lists, Dicts, Sets, Tuples (Deep)', icon:'📦', levels:[]},
+  {id:'w5', title:'World 5: OOP Colosseum', desc:'Classes, Magic Methods, Metaclasses', icon:'🏛️', levels:[]},
+  {id:'w6', title:'World 6: Advanced Abyss', desc:'Decorators, Generators, Context Managers', icon:'🌀', levels:[]},
+  {id:'w7', title:'World 7: Async Void', desc:'Asyncio, Threading, Multiprocessing, GIL', icon:'⚡', levels:[]},
+  {id:'w8', title:'World 8: DSA Dungeon', desc:'Arrays, Hashing, Two Pointers, Sliding Window, Stack, Queue (150 battles)', icon:'⚔️', levels:[]},
+  {id:'w9', title:'World 9: DSA Abyss', desc:'Linked List, Trees, Graphs, Heap, DP - FAANG Hard', icon:'🐉', levels:[]},
+  {id:'w10', title:'World 10: AI Frontier', desc:'Numpy, Pandas, RAG, Chatbots, Automation', icon:'🧠', levels:[]},
+  {id:'w11', title:'World 11: System Fortress', desc:'FastAPI, SQL, Redis, Docker, Git, Pytest, Deploy - Boss: Ship to prod', icon:'🏰', levels:[]},
+];
 
-function render(){
-  const container = document.getElementById('sections');
-  const filter = document.getElementById('filter');
-  filter.innerHTML = '<button class="active" onclick="filterSection(\'all\',this)">All</button>' + sectionsOrder.map(s=>`<button onclick="filterSection('${s.replace(/'/g,"\\'")}',this)">${s}</button>`).join('');
-  let html='';
-  let currentSection='';
-  questions.forEach(q=>{
-    if(q.section!==currentSection){
-      if(currentSection!=='') html+='</div>';
-      currentSection=q.section;
-      html+=`<div class="section" data-section="${currentSection}"><div class="section-head"><h2>${currentSection}</h2><span>${questions.filter(x=>x.section===currentSection).length} Qs</span></div>`;
-    }
-    let input='';
-    const saved = localStorage.getItem('q'+q.id) || '';
-    if(q.type==='text'){
-      input=`<input class="input" id="q${q.id}" placeholder="${q.placeholder}" value="${saved.replace(/"/g,'&quot;')}" oninput="onInput(${q.id})">`;
-    } else if(q.type==='number'){
-      input=`<input class="input" type="number" id="q${q.id}" placeholder="${q.placeholder}" value="${saved}" oninput="onInput(${q.id})">`;
-    } else if(q.type==='textarea'){
-      input=`<textarea class="input" id="q${q.id}" placeholder="${q.placeholder}" oninput="onInput(${q.id})">${saved}</textarea>`;
-    } else if(q.type==='select'){
-      input=`<select class="input" id="q${q.id}" onchange="onInput(${q.id})"><option value="">-- choose --</option>${q.options.map(o=>`<option ${saved===o?'selected':''}>${o}</option>`).join('')}</select>`;
-    } else if(q.type==='range'){
-      const v = saved || 5;
-      input=`<div class="range-wrap"><input class="range" type="range" min="1" max="10" value="${v}" id="q${q.id}" oninput="onInput(${q.id});document.getElementById('val${q.id}').innerText=this.value"><span class="range-val" id="val${q.id}">${v}</span></div>`;
-    }
-    html+=`<div class="q" data-q="${q.id}"><div class="q-label"><div class="q-num">${q.id}</div><div class="q-text">${q.text}</div></div>${input}</div>`;
-  });
-  html+='</div>';
-  container.innerHTML=html;
-  updateProgress();
+// Expand placeholder worlds with lock info
+let totalBattles=0; worlds.forEach(w=> w.levels.forEach(l=> totalBattles+= (l.battles?l.battles.length:0)));
+if(totalBattles<10) totalBattles=500; // display goal
+
+// ---------- STATE ----------
+let state = JSON.parse(localStorage.getItem('pa_state')||'null') || {
+  xp:0, lvl:1, rank:'E', solved:0, streak:1, lastDate:new Date().toDateString(),
+  curW:'w1', curL:'w1l1', curB:'w1l1b1', bookmarks:[], fails:{}, unlocked:['w1']
+};
+function rankForXp(xp){
+  if(xp>=3500) return 'S';
+  if(xp>=2000) return 'A';
+  if(xp>=1200) return 'B';
+  if(xp>=600) return 'C';
+  if(xp>=200) return 'D';
+  return 'E';
+}
+function save(){ localStorage.setItem('pa_state', JSON.stringify(state)); renderStats(); }
+function addXp(n){
+  state.xp+=n;
+  state.solved++;
+  let need = state.lvl*100;
+  if(state.xp>=need){ state.lvl++; toast(`🎉 LVL UP! Now LVL ${state.lvl}`); playSfx(true); }
+  state.rank=rankForXp(state.xp);
+  // unlock next world every 3 levels
+  if(state.lvl>=3 && !state.unlocked.includes('w2')) state.unlocked.push('w2');
+  if(state.lvl>=6 && !state.unlocked.includes('w3')) state.unlocked.push('w3');
+  if(state.solved>=5 && !state.unlocked.includes('w8')) state.unlocked.push('w8'); // early DSA
+  save();
 }
 
-function onInput(id){
-  const el=document.getElementById('q'+id);
-  localStorage.setItem('q'+id, el.value);
-  updateProgress();
-}
-function updateProgress(){
-  let answered=0;
-  questions.forEach(q=>{
-    const v=(localStorage.getItem('q'+q.id)||'').trim();
-    if(v) answered++;
-  });
-  const pct=Math.round(answered/100*100);
-  document.getElementById('progressBar').style.width=pct+'%';
-  document.getElementById('progressText').innerText=`${answered} / 100 answered`;
-  document.getElementById('percent').innerText=pct+'%';
-  // color q borders
-  questions.forEach(q=>{
-    const el=document.querySelector(`[data-q="${q.id}"]`);
-    const v=(localStorage.getItem('q'+q.id)||'').trim();
-    if(v){ el.style.borderLeft='3px solid #10b981'; el.style.background='rgba(16,185,129,0.04)'}
-    else{ el.style.borderLeft='3px solid transparent'; el.style.background='transparent'}
-  });
-}
-function saveAll(){ toast('Saved locally ✓ - you can close and come back'); }
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.innerText=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-function filterSection(name,btn){
-  document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.section').forEach(s=>{
-    if(name==='all' || s.dataset.section===name) s.style.display='block';
-    else s.style.display='none';
-  });
-}
-function scrollToUnanswered(){
-  for(let q of questions){
-    const v=(localStorage.getItem('q'+q.id)||'').trim();
-    if(!v){
-      document.querySelector(`[data-q="${q.id}"]`).scrollIntoView({behavior:'smooth',block:'center'});
-      toast('Question '+q.id+' is empty');
-      return;
-    }
-  }
-  toast('All 100 answered! Submit now 🚀');
-}
-function exportAnswers(){
-  const data={};
-  const list=[];
-  let answered=0;
-  questions.forEach(q=>{
-    const v=(localStorage.getItem('q'+q.id)||'').trim();
-    if(v) answered++;
-    data['Q'+q.id]=v||'';
-    list.push({id:q.id, question:q.text, answer:v||''});
-  });
-  if(answered<20){
-    if(!confirm(`You answered only ${answered}/100. Submit anyway? (Recommended: at least 50)`)) return;
-  }
-  const payload={meta:{answered:answered, total:100, date:new Date().toISOString()}, answers:data, detailed:list};
-  const json=JSON.stringify(payload,null,2);
-  document.getElementById('exportBox').classList.add('show');
-  document.getElementById('exportCode').innerText=json;
-  document.getElementById('exportBox').scrollIntoView({behavior:'smooth'});
-  // also generate link
-  const b64=btoa(unescape(encodeURIComponent(json)));
-  const link=location.origin+location.pathname+'#data='+b64;
-  const linkEl=document.getElementById('shareLink');
-  linkEl.style.display='block';
-  linkEl.innerText=link;
-  toast(`Ready! ${answered}/100 collected. Copy JSON and paste to AI.`);
-  // store for link copy
-  window._lastJSON=json;
-  window._lastLink=link;
-  updateProgress();
-}
-function copyExport(){
-  const txt=document.getElementById('exportCode').innerText;
-  navigator.clipboard.writeText(txt).then(()=>toast('JSON Copied! Paste it in chat'));
-}
-function copyLink(){
-  navigator.clipboard.writeText(window._lastLink).then(()=>toast('Link Copied! Send link to AI'));
-}
-function downloadJSON(){
-  const blob=new Blob([window._lastJSON],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='python-ascension-answers.json'; a.click();
-}
-function copyMarkdown(){
-  let md='# Python Ascension - My Answers\n\n';
-  questions.forEach(q=>{
-    const v=(localStorage.getItem('q'+q.id)||'').trim() || '_empty_';
-    md+=`**${q.id}. ${q.text}**\n> ${v}\n\n`;
-  });
-  navigator.clipboard.writeText(md).then(()=>toast('Markdown Copied!'));
-}
-function loadDemo(){
-  const demo=[
-    "Shadow","21","Intermediate - can build projects","3-4 hours","Night","Boring theory","Winning / leveling up","Not diagnosed but feels like it","No - left mid way","To get FAANG + prove I am best","Fear of being average","9",
-    "Solo Leveling (level up)","Dark + Serious + Epic","Little story - keep it light","Rank E -> S (Solo Leveling)","Both - linear + side quests","Yes - hard boss to unlock next world","Lose HP / Retry","Yes - swords, armor, titles","Yes - pet that evolves","Yes - epic music + SFX","Yes - punish if break","Yes","Global leaderboard","No solo","10-15 min","Level ups and boss fights",
-    "2 min quick","Text + code + diagram","5","Mix - MCQ + Debug + Write","Adaptive - AI adjusts to me","AI hint without giving answer","Detailed - why it works","No","Balanced","Yes - bring old questions back","Yes","Yes - shareable",
-    "variables, loops, functions, lists","recursion, decorators","Yes love them","Must cover deep","Yes deep","Yes - want greatest level","Yes","Yes","Yes - game per concept","CLI Apps","Yes - be pythonic","Yes latest","Both","loops","recursion",
-    "All - magic methods, metaclasses","Yes master it","Yes - all async","Yes - singleton, factory etc","Yes","Yes deep","Yes","Yes","Yes","Yes include","Yes","FastAPI (modern)","Yes deep","Yes - full dev","asyncio",
-    "Can do easy","FAANG crack","Inside same game as worlds","Theory + code","DP","Yes","Yes must","Yes deep","Yes","Yes","300","Balanced",
-    "All of above - become AI engineer","Yes","All","Yes - linear algebra, stats","Master","AI/ML Engineer","3 months","Yes - auto portfolio","Yes","Google",
-    "Yes - make it pro","A bit","Must - phone first","Dark - hacker","No","Yes","Yes make it viral","A game where every Python concept is a boss fight"
-  ];
-  questions.forEach((q,i)=>{
-    const v=demo[i]||'';
-    localStorage.setItem('q'+q.id, v);
-    const el=document.getElementById('q'+q.id);
-    if(el) el.value=v;
-    const valEl=document.getElementById('val'+q.id);
-    if(valEl) valEl.innerText=v;
-  });
-  updateProgress();
-  toast('Demo filled - edit and submit');
-}
-// auto load from hash
-window.addEventListener('load',()=>{
-  render();
-  if(location.hash.includes('data=')){
-    try{
-      const b64=location.hash.split('data=')[1];
-      const json=decodeURIComponent(escape(atob(b64)));
-      const data=JSON.parse(json);
-      const ans=data.answers||data;
-      Object.keys(ans).forEach(k=>{
-        const id=k.replace('Q','');
-        localStorage.setItem('q'+id, ans[k]);
-        const el=document.getElementById('q'+id);
-        if(el) el.value=ans[k];
+// ---------- RENDER ----------
+function renderWorlds(){
+  const el=document.getElementById('worldList');
+  let h='';
+  worlds.forEach(w=>{
+    const isUnlocked = state.unlocked.includes(w.id);
+    const active = state.curW===w.id;
+    const progress = 0;
+    h+=`<div class="world ${active?'active':''} ${isUnlocked?'':'locked'}" onclick="selectWorld('${w.id}')">
+      <div class="world-top"><span class="world-title">${w.icon} ${w.title}</span><span class="world-lvl">${w.levels.length||'??'} lvls</span></div>
+      <div class="world-desc">${w.desc}</div>
+      <div class="progress-mini"><div class="progress-mini-bar" style="width:${progress}%"></div></div>
+      ${!isUnlocked?'<div style="font-size:10px;color:var(--danger);margin-top:6px">🔒 Reach LVL '+(w.id==='w2'?'3':w.id==='w3'?'6':'10')+' to unlock</div>':''}
+    </div>`;
+    if(active){
+      h+=`<div class="levels">`;
+      w.levels.forEach(l=>{
+        const la = state.curL===l.id;
+        const done = false;
+        h+=`<div class="lvl ${la?'active':''} ${done?'done':''}" onclick="event.stopPropagation();selectLevel('${l.id}')">
+          <span>${l.title}</span>${l.battles?`<span class="badge">${l.battles.length}</span>`:''}
+        </div>`;
       });
-      updateProgress();
-      toast('Loaded shared answers');
-    }catch(e){}
-  }
+      if(w.levels.length===0) h+=`<div class="levels"><div class="lvl locked">🔒 Battles loading... 500 total in build</div></div>`;
+      h+=`</div>`;
+    }
+  });
+  el.innerHTML=h;
+  document.getElementById('worldCount').innerText=worlds.length+' Worlds • 500+ Battles';
+}
+function getBattleById(id){
+  for(let w of worlds) for(let l of w.levels) for(let b of (l.battles||[])) if(b.id===id) return {b,l,w};
+  return null;
+}
+function getLevelById(id){
+  for(let w of worlds) for(let l of w.levels) if(l.id===id) return {l,w};
+}
+let cur=null;
+function selectWorld(id){
+  if(!state.unlocked.includes(id)) { toast('🔒 Complete previous worlds to unlock'); return; }
+  state.curW=id;
+  const w=worlds.find(x=>x.id===id);
+  if(w.levels[0]) { state.curL=w.levels[0].id; if(w.levels[0].battles && w.levels[0].battles[0]) state.curB=w.levels[0].battles[0].id; }
+  save(); renderAll();
+}
+function selectLevel(id){
+  const res=getLevelById(id);
+  if(!res) return;
+  state.curL=id; state.curW=res.w.id;
+  if(res.l.battles && res.l.battles[0]) state.curB=res.l.battles[0].id;
+  save(); renderAll();
+}
+function selectBattle(id){
+  state.curB=id;
+  const r=getBattleById(id);
+  if(r){ state.curL=r.l.id; state.curW=r.w.id; }
+  save(); renderAll();
+}
+function renderLesson(){
+  const lvl = getLevelById(state.curL);
+  if(!lvl){ document.getElementById('lessonBody').innerHTML='Select a level'; return; }
+  document.getElementById('lessonTitle').innerText=lvl.l.title;
+  document.getElementById('lessonMeta').innerText=lvl.l.xp?lvl.l.xp+' XP':'';
+  document.getElementById('lessonBody').innerHTML = lvl.l.lesson || '<p style="color:var(--muted)">Lesson coming - this world covers '+lvl.w.desc+'</p><p>500 battles A-Z are being built. World 1 is fully playable now. Others unlock as you rank up.</p>';
+  document.getElementById('heroTitle').innerText = lvl.w.icon+' '+lvl.w.title;
+  document.getElementById('heroDesc').innerText = lvl.l.title + ' • ' + (lvl.w.desc);
+}
+function renderBattle(){
+  const r=getBattleById(state.curB);
+  if(!r){ document.getElementById('battleDesc').innerHTML='Select a battle from left. World 1 is ready - 5 battles.'; return; }
+  cur=r.b;
+  document.getElementById('battleTitle').innerText=cur.title;
+  document.getElementById('battleXp').innerText='+'+cur.xp+' XP';
+  document.getElementById('battleDesc').innerHTML=cur.desc;
+  document.getElementById('battleMeta').innerHTML=`<span class="meta">${cur.type}</span><span class="meta meta-xp">${cur.xp} XP</span><span class="meta">${r.w.title}</span>`;
+  let th='';
+  cur.tests.forEach((t,i)=>{
+    th+=`<div class="test">${t.vis?`✅ Visible ${i+1}: input <code>${escapeHtml(t.input||'∅')}</code> → expect <code>${escapeHtml(t.expected)}</code>`:`🔒 Hidden test ${i+1} (pass to rank up)`}</div>`;
+  });
+  document.getElementById('tests').innerHTML=th;
+  if(window.editor) window.editor.setValue(cur.starter);
+  else document.getElementById('output').innerText='Editor loading...';
+  document.getElementById('autoHint').innerText = state.fails[cur.id]>=2 ? `❗ 2 fails - hint available - 1 more fail → resource + bookmark` : `Fail 3x to unlock resource + auto-bookmark`;
+}
+function renderStats(){
+  document.getElementById('rankBadge').innerText='RANK '+state.rank;
+  document.getElementById('rankBadge').className='rank-badge rank-'+state.rank;
+  document.getElementById('xpBar').style.width=Math.min(100, (state.xp %100))+'%';
+  document.getElementById('xpText').innerText=state.xp + ' / ' + (state.lvl*100) + ' XP';
+  document.getElementById('lvlText').innerText='LVL '+state.lvl;
+  document.getElementById('solved').innerText=state.solved+'/500';
+  document.getElementById('statRank').innerText=state.rank;
+  document.getElementById('statLvl').innerText=state.lvl;
+  document.getElementById('statXp').innerText=state.xp;
+  document.getElementById('statWon').innerText=state.solved+' / 500';
+  document.getElementById('statStreak').innerText=state.streak+' day';
+  document.getElementById('streak').innerText='Streak '+state.streak;
+  document.getElementById('statBookmarks').innerText=state.bookmarks.length;
+  document.getElementById('reviseCount').innerText=state.bookmarks.length+' due';
+  // revise list
+  const rl=document.getElementById('reviseList');
+  if(state.bookmarks.length===0) rl.innerHTML='<div style="padding:12px;color:var(--muted);font-size:11px">No bookmarks - fail a battle to auto-bookmark for forgetting curve</div>';
+  else rl.innerHTML=state.bookmarks.slice(0,6).map(id=>{
+    const b=getBattleById(id);
+    return `<div class="bookmark" onclick="selectBattle('${id}')">🔖 ${b?b.b.title:id}</div>`;
+  }).join('');
+}
+function renderAll(){ renderWorlds(); renderLesson(); renderBattle(); renderStats(); }
+function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function toast(m){ const t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function scrollToBattle(){ document.getElementById('battleCard').scrollIntoView({behavior:'smooth'}); }
+function showRevise(){ document.querySelector('.right').scrollIntoView({behavior:'smooth'}); toast('📚 Revise Dungeon - click bookmark to retry'); }
+
+// ---------- EDITOR ----------
+let pyodide=null;
+async function initPy(){
+  try{
+    pyodide = await loadPyodide();
+    document.getElementById('output').innerText='✅ Python ready (Pyodide) - no lag - run your code';
+  }catch(e){ document.getElementById('output').innerText='Pyodide load failed, retry refresh: '+e; }
+}
+initPy();
+require.config({paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'}});
+require(['vs/editor/editor.main'],()=>{
+  window.editor = monaco.editor.create(document.getElementById('editor'),{
+    value:getBattleById(state.curB)?.b.starter || '# start coding\n',
+    language:'python',
+    theme:'vs-dark',
+    fontSize:13,
+    minimap:{enabled:false},
+    automaticLayout:true,
+    wordWrap:'on'
+  });
+  renderBattle();
 });
+function toggleVim(){
+  const on=document.getElementById('vimToggle').checked;
+  toast(on?'VIM: ON (use h j k l, :w not needed)':'VIM: OFF');
+  // Monaco vim requires extra lib - for now we toggle keybinding hint. Full vim comes in v1.1 (no heavy load now to keep no-lag)
+}
+function resetCode(){ if(cur && window.editor) window.editor.setValue(cur.starter); document.getElementById('output').innerText='Reset done';}
+async function runCode(){
+  if(!pyodide) return toast('Python still loading...');
+  const code = window.editor.getValue();
+  const outEl=document.getElementById('output');
+  outEl.innerText='⏳ Running...';
+  try{
+    // capture stdout
+    let result = await pyodide.runPythonAsync(`
+import sys, io, traceback
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+code = """${code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"')}"""
+try:
+    exec(code, {})
+    out = sys.stdout.getvalue()
+    err = sys.stderr.getvalue()
+    (out + err) if (out or err) else "✅ No output (no print?)"
+except Exception as e:
+    traceback.format_exc()
+`);
+    outEl.innerText=result;
+  }catch(e){ outEl.innerText='Error: '+e; }
+}
+async function submitCode(){
+  if(!cur) return;
+  if(!pyodide) return toast('Wait for Python...');
+  const code = window.editor.getValue();
+  const outEl=document.getElementById('output');
+  outEl.innerText='🧪 Testing... (visible + hidden)';
+  let allPass=true;
+  let logs=[];
+  for(let i=0;i<cur.tests.length;i++){
+    const t=cur.tests[i];
+    try{
+      const expected = t.expected;
+      const inputVal = t.input || '';
+      // escape for python string
+      const escCode = code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
+      const escInput = inputVal.replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n');
+      const res = await pyodide.runPythonAsync(`
+import sys, io, traceback, builtins
+# mock input
+_inputs = """${escInput}""".splitlines(True)
+_iter = iter(_inputs)
+def mock_input(prompt=""):
+    try:
+        return next(_iter).rstrip("\\n")
+    except StopIteration:
+        return ""
+builtins.input = mock_input
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+code = """${escCode}"""
+try:
+    exec(code, {})
+    sys.stdout.getvalue()
+except Exception as e:
+    traceback.format_exc()
+`);
+      const pass = res === expected;
+      logs.push((pass?'✅':'❌')+' Test '+(i+1)+(t.vis?' (visible)':' (hidden)')+': '+(pass?'PASS':`FAIL - got ${JSON.stringify(res)} expect ${JSON.stringify(expected)}`));
+      if(!pass) allPass=false;
+    }catch(e){ logs.push('❌ Test '+(i+1)+' error '+e); allPass=false; }
+  }
+  outEl.innerText=logs.join('\n');
+  // handle fail book-keeping
+  if(allPass){
+    playSfx(true);
+    addXp(cur.xp);
+    toast(`⚔️ Victory! +${cur.xp} XP - ${cur.title}`);
+    // auto next
+    setTimeout(()=>nextBattle(),800);
+  } else {
+    playSfx(false);
+    state.fails[cur.id]=(state.fails[cur.id]||0)+1;
+    if(state.fails[cur.id]>=3){
+      if(!state.bookmarks.includes(cur.id)) state.bookmarks.push(cur.id);
+      toast(`📚 Auto-bookmarked + Resource: ${cur.resource}`);
+      // show resource
+      outEl.innerText += `\n\n📖 Learn: ${cur.resource}\n🔖 Bookmarked to Revise Dungeon (forgetting curve: revise tomorrow)`;
+    } else {
+      toast(`❌ Failed - ${3-state.fails[cur.id]} tries left before bookmark`);
+    }
+    save();
+  }
+  renderStats();
+}
+function getHint(){
+  if(!cur) return;
+  if(state.fails[cur.id]>=2 || confirm('Use hint -5 XP?')){
+    state.xp=Math.max(0,state.xp-5); save();
+    toast('💡 Hint: '+cur.hint);
+    document.getElementById('output').innerText='💡 Hint: '+cur.hint + '\n\nResource: '+cur.resource;
+  } else toast('Try 2 more fails to unlock free hint');
+}
+function bookmarkCurrent(){
+  if(!cur) return;
+  if(!state.bookmarks.includes(cur.id)){ state.bookmarks.push(cur.id); save(); toast('🔖 Bookmarked - will appear in Revise Dungeon tomorrow');}
+  else toast('Already bookmarked');
+}
+function nextBattle(){
+  const r=getBattleById(state.curB);
+  if(!r) return;
+  const battles=r.l.battles;
+  const idx=battles.findIndex(x=>x.id===state.curB);
+  if(idx < battles.length-1) selectBattle(battles[idx+1].id);
+  else {
+    // next level
+    const w=worlds.find(x=>x.id===state.curW);
+    const lIdx=w.levels.findIndex(x=>x.id===state.curL);
+    if(lIdx < w.levels.length-1) selectLevel(w.levels[lIdx+1].id);
+    else toast('🏆 World clear! Rank up - next world unlocking...');
+  }
+}
+function prevBattle(){
+  const r=getBattleById(state.curB);
+  if(!r) return;
+  const battles=r.l.battles;
+  const idx=battles.findIndex(x=>x.id===state.curB);
+  if(idx>0) selectBattle(battles[idx-1].id);
+}
+function toggleMusic(){
+  const a=document.getElementById('lofi');
+  const b=document.getElementById('musicBtn');
+  if(a.paused){ a.volume=0.25; a.play().catch(()=>toast('Tap again to allow audio')); b.innerText='🎵 Lo-fi: ON'; b.style.background='var(--accent)'; b.style.color='white'; }
+  else { a.pause(); b.innerText='🎵 Lo-fi: OFF'; b.style.background=''; b.style.color=''; }
+}
+function playSfx(ok){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(); const g=ctx.createGain();
+    o.type='sine'; o.frequency.value=ok?880:180; o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.15,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.3);
+    o.start(); o.stop(ctx.currentTime+0.3);
+  }catch(e){}
+}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme', t==='default'?'':t);
+  document.querySelectorAll('.theme').forEach(x=>x.classList.remove('active'));
+  event.target.classList.add('active');
+  toast('Theme: '+t);
+}
+function resetProgress(){
+  if(confirm('Reset all progress (rank, XP, bookmarks)?')){
+    localStorage.removeItem('pa_state'); location.reload();
+  }
+}
+// init streak
+(() =>{
+  const today=new Date().toDateString();
+  if(state.lastDate!==today){
+    // check if yesterday? simplified streak++
+    state.streak++;
+    state.lastDate=today;
+    // notification simulation
+    if(Notification && Notification.permission==='granted') new Notification('Python Ascension', {body:'🔥 Streak '+state.streak+' - 15 min quest ready!'});
+    save();
+  }
+  if(Notification && Notification.permission==='default') Notification.requestPermission();
+})();
+
+// initial render
+renderAll();
 </script>
 </body>
 </html>
