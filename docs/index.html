@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Ascension - 100 Questions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@600;800&display=swap');
+  :root{--bg:#0a0a0f;--card:#11111b;--card2:#181825;--border:#2a2a3a;--accent:#7c3aed;--accent2:#06b6d4;--accent3:#f59e0b;--text:#e5e7eb;--muted:#9ca3af;--success:#10b981}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;min-height:100vh}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(10,10,15,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .logo{font-family:'Orbitron',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px}
+  .logo span{color:var(--accent)}
+  .progress-wrap{flex:1;max-width:420px;margin:0 12px}
+  .progress-bg{height:8px;background:#1f1f2e;border-radius:999px;overflow:hidden}
+  .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s; border-radius:999px}
+  .progress-text{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between}
+  .container{max-width:860px;margin:0 auto;padding:24px 16px 120px}
+  .hero{text-align:center;padding:28px 12px 8px}
+  .hero h1{font-family:'Orbitron',sans-serif;font-size:28px;margin-bottom:8px}
+  .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{color:var(--muted);font-size:13px;line-height:1.6;max-width:640px;margin:0 auto}
+  .badge{display:inline-block;margin-top:10px;background:var(--card2);border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:11px;color:var(--accent2)}
+  .section{margin-top:28px;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .section-head{padding:16px 18px;background:linear-gradient(90deg,rgba(124,58,237,0.15),rgba(6,182,214,0.08));border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .section-head h2{font-family:'Orbitron',sans-serif;font-size:14px;letter-spacing:.6px}
+  .section-head span{font-size:11px;color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:999px;border:1px solid var(--border)}
+  .q{padding:18px;border-bottom:1px solid rgba(42,42,58,0.6);display:grid;gap:10px}
+  .q:last-child{border-bottom:none}
+  .q-label{display:flex;gap:10px;align-items:flex-start}
+  .q-num{min-width:32px;height:32px;display:grid;place-items:center;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0}
+  .q-text{font-size:13px;line-height:1.5;padding-top:4px}
+  .q-text em{color:var(--accent3);font-style:normal}
+  .input{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:10px;font-family:inherit;font-size:13px;outline:none;transition:border .2s, box-shadow .2s}
+  .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.2)}
+  textarea.input{min-height:84px;resize:vertical}
+  select.input{cursor:pointer}
+  .range-wrap{display:flex;align-items:center;gap:12px}
+  .range{flex:1}
+  .range-val{min-width:42px;text-align:center;background:var(--accent);color:white;padding:6px 8px;border-radius:8px;font-weight:700;font-size:13px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card2);font-size:12px;cursor:pointer;transition:all .15s}
+  .chip.active{background:var(--accent);color:white;border-color:var(--accent)}
+  .actions{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:14px 16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;z-index:40}
+  .btn{padding:12px 18px;border-radius:10px;font-family:'Orbitron',sans-serif;font-weight:600;font-size:12px;letter-spacing:.5px;cursor:pointer;border:none;transition:transform .1s, opacity .2s}
+  .btn:active{transform:scale(0.98)}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white}
+  .btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+  .btn-success{background:var(--success);color:white}
+  .toast{position:fixed;top:70px;right:16px;background:var(--card2);border:1px solid var(--border);padding:12px 14px;border-radius:10px;font-size:12px;transform:translateX(400px);transition:transform .3s;z-index:60;max-width:320px}
+  .toast.show{transform:translateX(0)}
+  .export-box{display:none;margin-top:20px;background:#0f0f14;border:1px solid var(--accent);border-radius:14px;padding:18px}
+  .export-box.show{display:block}
+  .export-box h3{font-family:'Orbitron',sans-serif;font-size:13px;margin-bottom:10px;color:var(--accent2)}
+  .code{width:100%;min-height:140px;background:#000;border:1px solid var(--border);border-radius:10px;padding:12px;color:#10b981;font-size:11px;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-all;overflow:auto}
+  .hint{font-size:11px;color:var(--muted);margin-top:4px}
+  .filter{max-width:860px;margin:12px auto 0;padding:0 16px;display:flex;gap:8px;overflow-x:auto}
+  .filter button{white-space:nowrap;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:11px;cursor:pointer}
+  .filter button.active{background:var(--accent);color:white;border-color:var(--accent)}
+  @media(max-width:600px){.hero h1{font-size:20px}.nav{padding:10px 12px}}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="logo">PYTHON <span>ASCENSION</span> <span style="font-size:10px;color:var(--muted);font-family:monospace"> 100Q</span></div>
+  <div class="progress-wrap">
+    <div class="progress-bg"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text"><span id="progressText">0 / 100 answered</span><span id="percent">0%</span></div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-ghost" style="padding:8px 12px;font-size:11px" onclick="saveAll()">💾 Save</button>
+    <button class="btn btn-ghost" style="padding:8px 12px;font-size:11px" onclick="loadDemo()">Demo</button>
+  </div>
+</div>
+<div class="container">
+  <div class="hero">
+    <h1>Become the <span>GREATEST</span> Python Dev</h1>
+    <p>Answer 100 questions. I will build your personal RPG game that covers <b>every</b> Python topic from basics to AI, tailored to your dopamine and job goals. Auto-saves locally.</p>
+    <div class="badge">⚡ 100% interactive • takes 7-10 min • auto-saves</div>
+  </div>
+  <div class="filter" id="filter"></div>
+  <div id="sections"></div>
+  <div class="export-box" id="exportBox">
+    <h3>✅ Answers Ready - Copy & Send to AI</h3>
+    <p class="hint" style="margin-bottom:10px">Copy this JSON and paste it back in the chat. Or copy the shareable link.</p>
+    <div class="code" id="exportCode"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn btn-success" onclick="copyExport()">📋 Copy JSON</button>
+      <button class="btn btn-primary" onclick="copyLink()">🔗 Copy Share Link</button>
+      <button class="btn btn-ghost" onclick="downloadJSON()">⬇️ Download .json</button>
+      <button class="btn btn-ghost" onclick="copyMarkdown()">Copy Markdown</button>
+    </div>
+    <div id="shareLink" class="code" style="min-height:60px;margin-top:12px;display:none;word-break:break-all"></div>
+    <p class="hint" style="margin-top:10px">After copying, paste it here in chat and I will instantly build your game.</p>
+  </div>
+</div>
+<div class="actions">
+  <button class="btn btn-ghost" onclick="scrollToUnanswered()">⚠️ Find Unanswered</button>
+  <button class="btn btn-primary" onclick="exportAnswers()">🚀 Submit & Get Game</button>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const questions = 
+[{"id": 1, "text": "What is your name / gamer tag?", "type": "text", "placeholder": "e.g. Shadow", "section": "About You & Focus"}, {"id": 2, "text": "Age?", "type": "number", "placeholder": "e.g. 20", "section": "About You & Focus"}, {"id": 3, "text": "Current Python level?", "type": "select", "options": ["Absolute beginner", "Know basics", "Intermediate - can build projects", "Advanced - but want to master everything"], "section": "About You & Focus"}, {"id": 4, "text": "Hours you can play if it's FUN per day?", "type": "select", "options": ["<1 hour", "1-2 hours", "3-4 hours", "5+ hours - no limit if fun"], "section": "About You & Focus"}, {"id": 5, "text": "Best time to study?", "type": "select", "options": ["Morning", "Afternoon", "Night", "Late night 12-4am"], "section": "About You & Focus"}, {"id": 6, "text": "What kills your focus most?", "type": "select", "options": ["Instagram/Reels", "Overthinking", "Boring theory", "No instant result", "Laziness / low energy"], "section": "About You & Focus"}, {"id": 7, "text": "What gives you dopamine fastest?", "type": "select", "options": ["Winning / leveling up", "Solving hard puzzle", "Story + characters", "Competition / leaderboard", "Loot / collection"], "section": "About You & Focus"}, {"id": 8, "text": "Do you have ADHD / diagnosed concentration issue or just feel it?", "type": "select", "options": ["Yes diagnosed", "Not diagnosed but feels like it", "No - just lazy/distracted", "Don't know"], "section": "About You & Focus"}, {"id": 9, "text": "Have you ever completed a long course before? Which one?", "type": "text", "placeholder": "e.g. no, left mid-way", "section": "About You & Focus"}, {"id": 10, "text": "Why do you want to be GREATEST python dev? Deep reason?", "type": "textarea", "placeholder": "money, prove yourself, love coding...", "section": "About You & Focus"}, {"id": 11, "text": "What happens if you don't achieve this in 1 year?", "type": "text", "placeholder": "your fear", "section": "About You & Focus"}, {"id": 12, "text": "On scale 1-10 how serious are you right now?", "type": "range", "placeholder": "1-10", "section": "About You & Focus"}, {"id": 13, "text": "Favorite Theme / Universe?", "type": "select", "options": ["Solo Leveling (level up)", "Naruto / Anime", "Cyberpunk / Hacker", "Dark Souls / Elden Ring", "Sci-Fi Space", "Fantasy RPG", "Minimal Hacker Terminal"], "section": "Game Soul - Vibe"}, {"id": 14, "text": "Game vibe you want?", "type": "select", "options": ["Dark + Serious + Epic", "Colorful + Fun + Anime", "Clean + Minimal + Pro", "Retro Pixel 8-bit"], "section": "Game Soul - Vibe"}, {"id": 15, "text": "Story + dialogue or straight to code?", "type": "select", "options": ["Full story with NPCs", "Little story - keep it light", "No story - just battles"], "section": "Game Soul - Vibe"}, {"id": 16, "text": "Character progression style?", "type": "select", "options": ["Rank E -> S (Solo Leveling)", "Level 1-100", "Belts (white -> black)", "No levels - just worlds"], "section": "Game Soul - Vibe"}, {"id": 17, "text": "World structure?", "type": "select", "options": ["Linear 1->50 levels", "Open world map to explore", "Both - linear + side quests"], "section": "Game Soul - Vibe"}, {"id": 18, "text": "Do you want Boss Fights every 5 levels?", "type": "select", "options": ["Yes - hard boss to unlock next world", "No - keep flow smooth", "Yes but optional"], "section": "Game Soul - Vibe"}, {"id": 19, "text": "Penalty on fail?", "type": "select", "options": ["Lose HP / Retry", "Lose XP / Rank down", "No penalty - just try again", "Hardcore - restart world"], "section": "Game Soul - Vibe"}, {"id": 20, "text": "Loot system?", "type": "select", "options": ["Yes - swords, armor, titles", "Yes - but subtle (badges)", "No - keep simple"], "section": "Game Soul - Vibe"}, {"id": 21, "text": "Want Pets / Companions?", "type": "select", "options": ["Yes - pet that evolves", "No"], "section": "Game Soul - Vibe"}, {"id": 22, "text": "Sound & music?", "type": "select", "options": ["Yes - epic music + SFX", "SFX only", "Silent"], "section": "Game Soul - Vibe"}, {"id": 23, "text": "Streak system like Duolingo?", "type": "select", "options": ["Yes - punish if break", "Yes - but forgiving 1 freeze/week", "No streaks"], "section": "Game Soul - Vibe"}, {"id": 24, "text": "Daily quests + Weekly challenges?", "type": "select", "options": ["Yes", "No - just main quest"], "section": "Game Soul - Vibe"}, {"id": 25, "text": "Leaderboard / PvP?", "type": "select", "options": ["Global leaderboard", "Friends only", "Solo only - no pressure"], "section": "Game Soul - Vibe"}, {"id": 26, "text": "Multiplayer co-op?", "type": "select", "options": ["Yes want co-op", "No solo"], "section": "Game Soul - Vibe"}, {"id": 27, "text": "How long should one level take?", "type": "select", "options": ["5 min", "10-15 min", "20-30 min", "45+ min deep"], "section": "Game Soul - Vibe"}, {"id": 28, "text": "What will make you ADDICTED to open it daily?", "type": "textarea", "placeholder": "what keeps you coming back?", "section": "Game Soul - Vibe"}, {"id": 29, "text": "Lesson length before code?", "type": "select", "options": ["30 sec - just hint", "2 min quick", "5 min deep", "No lesson - just problem"], "section": "Learning Engine"}, {"id": 30, "text": "Lesson format?", "type": "select", "options": ["Text + code + diagram", "Video embedded", "Interactive - run code while reading", "Comic / story style"], "section": "Learning Engine"}, {"id": 31, "text": "How many questions per lesson to unlock next?", "type": "select", "options": ["3", "5", "7", "10"], "section": "Learning Engine"}, {"id": 32, "text": "Question types mix?", "type": "select", "options": ["Only write code from scratch", "Mix - MCQ + Debug + Write", "Debug existing code", "Fill in blanks at start"], "section": "Learning Engine"}, {"id": 33, "text": "Difficulty curve?", "type": "select", "options": ["Slow - very gradual", "Medium", "Hard - jump fast", "Adaptive - AI adjusts to me"], "section": "Learning Engine"}, {"id": 34, "text": "Hints?", "type": "select", "options": ["AI hint without giving answer", "Show solution after 3 fails", "No hints - struggle", "Buy hints with XP"], "section": "Learning Engine"}, {"id": 35, "text": "Explanations after solving?", "type": "select", "options": ["Detailed - why it works", "Short", "Show best 3 solutions", "Video explain"], "section": "Learning Engine"}, {"id": 36, "text": "Do you want typing practice / speed?", "type": "select", "options": ["Yes", "No"], "section": "Learning Engine"}, {"id": 37, "text": "Language - Explain like I'm 5 or like a dev?", "type": "select", "options": ["ELI5 - super simple", "Balanced", "Pro - deep technical"], "section": "Learning Engine"}, {"id": 38, "text": "Revision / Spaced Repetition?", "type": "select", "options": ["Yes - bring old questions back", "No"], "section": "Learning Engine"}, {"id": 39, "text": "Want notes / cheatsheet auto-generated per world?", "type": "select", "options": ["Yes", "No"], "section": "Learning Engine"}, {"id": 40, "text": "Certificate / proof after each world?", "type": "select", "options": ["Yes - shareable", "No need"], "section": "Learning Engine"}, {"id": 41, "text": "Which basics you already mastered? tick", "type": "textarea", "placeholder": "variables, loops, functions, lists/dicts...", "section": "Python Core - Foundations"}, {"id": 42, "text": "Which basics you still confuse?", "type": "textarea", "placeholder": "e.g. recursion, slicing...", "section": "Python Core - Foundations"}, {"id": 43, "text": "Want tricky Python puzzles? (like [[]]*3 trap)", "type": "select", "options": ["Yes love them", "Sometimes", "No - keep practical"], "section": "Python Core - Foundations"}, {"id": 44, "text": "File handling importance?", "type": "select", "options": ["Must cover deep", "Basic is enough", "Skip"], "section": "Python Core - Foundations"}, {"id": 45, "text": "Error handling / debugging deep?", "type": "select", "options": ["Yes deep", "Basic", "Skip"], "section": "Python Core - Foundations"}, {"id": 46, "text": "Want Python internals? (GIL, memory, CPython)", "type": "select", "options": ["Yes - want greatest level", "No - too deep", "Later"], "section": "Python Core - Foundations"}, {"id": 47, "text": "Regex - include?", "type": "select", "options": ["Yes", "No", "Basic only"], "section": "Python Core - Foundations"}, {"id": 48, "text": "Want typing / type hints + mypy?", "type": "select", "options": ["Yes", "No"], "section": "Python Core - Foundations"}, {"id": 49, "text": "How do you want to practice basics - mini-games?", "type": "select", "options": ["Yes - game per concept", "Just problems"], "section": "Python Core - Foundations"}, {"id": 50, "text": "Project after basics? e.g. CLI To-Do or Scraper", "type": "select", "options": ["CLI Apps", "Automation scripts", "Games with Pygame", "Web mini apps"], "section": "Python Core - Foundations"}, {"id": 51, "text": "Do you want to master Pythonic style (one-liners, comprehensions)?", "type": "select", "options": ["Yes - be pythonic", "No - readable first"], "section": "Python Core - Foundations"}, {"id": 52, "text": "Want to cover Python 3.12+ features (match/case, walrus)?", "type": "select", "options": ["Yes latest", "No - stable only"], "section": "Python Core - Foundations"}, {"id": 53, "text": "How to test basics - output check or unit tests?", "type": "select", "options": ["Output check", "Unit tests (pytest) like real job", "Both"], "section": "Python Core - Foundations"}, {"id": 54, "text": "Favorite basic concept?", "type": "text", "placeholder": "", "section": "Python Core - Foundations"}, {"id": 55, "text": "Most hated basic concept?", "type": "text", "placeholder": "", "section": "Python Core - Foundations"}, {"id": 56, "text": "OOP depth?", "type": "select", "options": ["All - magic methods, metaclasses", "Medium - classes + inheritance", "Basic - just classes"], "section": "Python Advanced"}, {"id": 57, "text": "Decorators / Generators / Context Managers - deep?", "type": "select", "options": ["Yes master it", "Overview only"], "section": "Python Advanced"}, {"id": 58, "text": "Async / Threading / Multiprocessing - include?", "type": "select", "options": ["Yes - all async", "Only async/await", "Skip - too hard"], "section": "Python Advanced"}, {"id": 59, "text": "Want Design Patterns in Python?", "type": "select", "options": ["Yes - singleton, factory etc", "No"], "section": "Python Advanced"}, {"id": 60, "text": "Want to build own decorators / iterators / frameworks?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 61, "text": "Testing - pytest, mock, coverage?", "type": "select", "options": ["Yes deep", "Basic", "Skip"], "section": "Python Advanced"}, {"id": 62, "text": "Packaging - pip, venv, poetry, publishing?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 63, "text": "Performance - cProfile, optimization, Cython?", "type": "select", "options": ["Yes", "No", "Later"], "section": "Python Advanced"}, {"id": 64, "text": "Want to read real Python open-source code inside game?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 65, "text": "Security / Hacking with Python?", "type": "select", "options": ["Yes include", "No"], "section": "Python Advanced"}, {"id": 66, "text": "Automation - bots, selenium, OS scripting?", "type": "select", "options": ["Yes", "No"], "section": "Python Advanced"}, {"id": 67, "text": "Web - FastAPI / Django?", "type": "select", "options": ["FastAPI (modern)", "Django (full)", "Flask (simple)", "No web"], "section": "Python Advanced"}, {"id": 68, "text": "Databases - SQL, SQLAlchemy, Redis?", "type": "select", "options": ["Yes deep", "Basic SQL only", "No"], "section": "Python Advanced"}, {"id": 69, "text": "Want Docker + Git + Linux + Deploy?", "type": "select", "options": ["Yes - full dev", "Basic git only", "No"], "section": "Python Advanced"}, {"id": 70, "text": "Which advanced topic scares you most?", "type": "text", "placeholder": "", "section": "Python Advanced"}, {"id": 71, "text": "DSA level now?", "type": "select", "options": ["Zero", "Can do easy", "Medium", "Can do hard"], "section": "DSA Path"}, {"id": 72, "text": "DSA goal?", "type": "select", "options": ["FAANG crack", "Job ready", "Just good logic", "Competitive programming"], "section": "DSA Path"}, {"id": 73, "text": "Want DSA inside Python game or separate track?", "type": "select", "options": ["Inside same game as worlds", "Separate DSA dungeon"], "section": "DSA Path"}, {"id": 74, "text": "Want DSA theory or just Python code?", "type": "select", "options": ["Theory + code", "Only code"], "section": "DSA Path"}, {"id": 75, "text": "Which DSA you hate / stuck on?", "type": "textarea", "placeholder": "e.g. DP, graphs...", "section": "DSA Path"}, {"id": 76, "text": "Want daily DSA challenge like LeetCode streak?", "type": "select", "options": ["Yes", "No"], "section": "DSA Path"}, {"id": 77, "text": "Want visualizations for DSA (trees, graphs)?", "type": "select", "options": ["Yes must", "No"], "section": "DSA Path"}, {"id": 78, "text": "Time complexity - want to master Big O?", "type": "select", "options": ["Yes deep", "Basic", "No"], "section": "DSA Path"}, {"id": 79, "text": "Want company-wise DSA (Google, Amazon patterns)?", "type": "select", "options": ["Yes", "No - just topics"], "section": "DSA Path"}, {"id": 80, "text": "Want mock interviews inside game?", "type": "select", "options": ["Yes", "No"], "section": "DSA Path"}, {"id": 81, "text": "How many DSA questions total you want? 50, 200, 500?", "type": "select", "options": ["50", "150", "300", "500+"], "section": "DSA Path"}, {"id": 82, "text": "DSA difficulty mix?", "type": "select", "options": ["Many easy -> few hard", "Balanced", "Most hard - brutal"], "section": "DSA Path"}, {"id": 83, "text": "AI goal?", "type": "select", "options": ["Build AI apps (use APIs)", "ML from scratch (numpy/pandas)", "Deep Learning (pytorch)", "All of above - become AI engineer"], "section": "AI & Career"}, {"id": 84, "text": "Want to use OpenAI API + LangChain + RAG?", "type": "select", "options": ["Yes", "No"], "section": "AI & Career"}, {"id": 85, "text": "Want AI projects inside game?", "type": "select", "options": ["Chatbot", "Image gen", "Data analysis", "All"], "section": "AI & Career"}, {"id": 86, "text": "Math for AI - want to cover?", "type": "select", "options": ["Yes - linear algebra, stats", "No - just code"], "section": "AI & Career"}, {"id": 87, "text": "Numpy / Pandas depth?", "type": "select", "options": ["Master", "Basic", "Skip"], "section": "AI & Career"}, {"id": 88, "text": "Job you want?", "type": "select", "options": ["Python Backend Dev", "AI/ML Engineer", "Fullstack Python", "Freelance / Startup", "Still exploring"], "section": "AI & Career"}, {"id": 89, "text": "Timeline to get job?", "type": "select", "options": ["1 month", "3 months", "6 months", "1 year"], "section": "AI & Career"}, {"id": 90, "text": "Do you want resume projects from this game?", "type": "select", "options": ["Yes - auto portfolio", "No"], "section": "AI & Career"}, {"id": 91, "text": "Want interview prep (HR + technical) inside game?", "type": "select", "options": ["Yes", "No"], "section": "AI & Career"}, {"id": 92, "text": "Dream company?", "type": "text", "placeholder": "e.g. Google, startup...", "section": "AI & Career"}, {"id": 93, "text": "Want web code to be visible on GitHub for recruiters?", "type": "select", "options": ["Yes - make it pro", "Hide - just for me"], "section": "Final - Tech & Vision"}, {"id": 94, "text": "Do you know React / HTML-CSS?", "type": "select", "options": ["Yes", "A bit", "No - only Python"], "section": "Final - Tech & Vision"}, {"id": 95, "text": "Should game work on mobile?", "type": "select", "options": ["Must - phone first", "Nice to have", "Desktop only"], "section": "Final - Tech & Vision"}, {"id": 96, "text": "Dark mode or Light mode default?", "type": "select", "options": ["Dark - hacker", "Light - clean", "Both toggle"], "section": "Final - Tech & Vision"}, {"id": 97, "text": "Want offline mode?", "type": "select", "options": ["Yes", "No"], "section": "Final - Tech & Vision"}, {"id": 98, "text": "Should I add real Python cert at the end you can share on LinkedIn?", "type": "select", "options": ["Yes", "No"], "section": "Final - Tech & Vision"}, {"id": 99, "text": "Repo should be public pro - want README + demo + live link?", "type": "select", "options": ["Yes make it viral", "Keep simple"], "section": "Final - Tech & Vision"}, {"id": 100, "text": "In one line: What will make you say THIS is the GREATEST Python game ever?", "type": "textarea", "placeholder": "your vision", "section": "Final - Tech & Vision"}];
+const sectionsOrder = [...new Set(questions.map(q=>q.section))];
+
+function render(){
+  const container = document.getElementById('sections');
+  const filter = document.getElementById('filter');
+  filter.innerHTML = '<button class="active" onclick="filterSection(\'all\',this)">All</button>' + sectionsOrder.map(s=>`<button onclick="filterSection('${s.replace(/'/g,"\\'")}',this)">${s}</button>`).join('');
+  let html='';
+  let currentSection='';
+  questions.forEach(q=>{
+    if(q.section!==currentSection){
+      if(currentSection!=='') html+='</div>';
+      currentSection=q.section;
+      html+=`<div class="section" data-section="${currentSection}"><div class="section-head"><h2>${currentSection}</h2><span>${questions.filter(x=>x.section===currentSection).length} Qs</span></div>`;
+    }
+    let input='';
+    const saved = localStorage.getItem('q'+q.id) || '';
+    if(q.type==='text'){
+      input=`<input class="input" id="q${q.id}" placeholder="${q.placeholder}" value="${saved.replace(/"/g,'&quot;')}" oninput="onInput(${q.id})">`;
+    } else if(q.type==='number'){
+      input=`<input class="input" type="number" id="q${q.id}" placeholder="${q.placeholder}" value="${saved}" oninput="onInput(${q.id})">`;
+    } else if(q.type==='textarea'){
+      input=`<textarea class="input" id="q${q.id}" placeholder="${q.placeholder}" oninput="onInput(${q.id})">${saved}</textarea>`;
+    } else if(q.type==='select'){
+      input=`<select class="input" id="q${q.id}" onchange="onInput(${q.id})"><option value="">-- choose --</option>${q.options.map(o=>`<option ${saved===o?'selected':''}>${o}</option>`).join('')}</select>`;
+    } else if(q.type==='range'){
+      const v = saved || 5;
+      input=`<div class="range-wrap"><input class="range" type="range" min="1" max="10" value="${v}" id="q${q.id}" oninput="onInput(${q.id});document.getElementById('val${q.id}').innerText=this.value"><span class="range-val" id="val${q.id}">${v}</span></div>`;
+    }
+    html+=`<div class="q" data-q="${q.id}"><div class="q-label"><div class="q-num">${q.id}</div><div class="q-text">${q.text}</div></div>${input}</div>`;
+  });
+  html+='</div>';
+  container.innerHTML=html;
+  updateProgress();
+}
+
+function onInput(id){
+  const el=document.getElementById('q'+id);
+  localStorage.setItem('q'+id, el.value);
+  updateProgress();
+}
+function updateProgress(){
+  let answered=0;
+  questions.forEach(q=>{
+    const v=(localStorage.getItem('q'+q.id)||'').trim();
+    if(v) answered++;
+  });
+  const pct=Math.round(answered/100*100);
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressText').innerText=`${answered} / 100 answered`;
+  document.getElementById('percent').innerText=pct+'%';
+  // color q borders
+  questions.forEach(q=>{
+    const el=document.querySelector(`[data-q="${q.id}"]`);
+    const v=(localStorage.getItem('q'+q.id)||'').trim();
+    if(v){ el.style.borderLeft='3px solid #10b981'; el.style.background='rgba(16,185,129,0.04)'}
+    else{ el.style.borderLeft='3px solid transparent'; el.style.background='transparent'}
+  });
+}
+function saveAll(){ toast('Saved locally ✓ - you can close and come back'); }
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.innerText=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+function filterSection(name,btn){
+  document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>{
+    if(name==='all' || s.dataset.section===name) s.style.display='block';
+    else s.style.display='none';
+  });
+}
+function scrollToUnanswered(){
+  for(let q of questions){
+    const v=(localStorage.getItem('q'+q.id)||'').trim();
+    if(!v){
+      document.querySelector(`[data-q="${q.id}"]`).scrollIntoView({behavior:'smooth',block:'center'});
+      toast('Question '+q.id+' is empty');
+      return;
+    }
+  }
+  toast('All 100 answered! Submit now 🚀');
+}
+function exportAnswers(){
+  const data={};
+  const list=[];
+  let answered=0;
+  questions.forEach(q=>{
+    const v=(localStorage.getItem('q'+q.id)||'').trim();
+    if(v) answered++;
+    data['Q'+q.id]=v||'';
+    list.push({id:q.id, question:q.text, answer:v||''});
+  });
+  if(answered<20){
+    if(!confirm(`You answered only ${answered}/100. Submit anyway? (Recommended: at least 50)`)) return;
+  }
+  const payload={meta:{answered:answered, total:100, date:new Date().toISOString()}, answers:data, detailed:list};
+  const json=JSON.stringify(payload,null,2);
+  document.getElementById('exportBox').classList.add('show');
+  document.getElementById('exportCode').innerText=json;
+  document.getElementById('exportBox').scrollIntoView({behavior:'smooth'});
+  // also generate link
+  const b64=btoa(unescape(encodeURIComponent(json)));
+  const link=location.origin+location.pathname+'#data='+b64;
+  const linkEl=document.getElementById('shareLink');
+  linkEl.style.display='block';
+  linkEl.innerText=link;
+  toast(`Ready! ${answered}/100 collected. Copy JSON and paste to AI.`);
+  // store for link copy
+  window._lastJSON=json;
+  window._lastLink=link;
+  updateProgress();
+}
+function copyExport(){
+  const txt=document.getElementById('exportCode').innerText;
+  navigator.clipboard.writeText(txt).then(()=>toast('JSON Copied! Paste it in chat'));
+}
+function copyLink(){
+  navigator.clipboard.writeText(window._lastLink).then(()=>toast('Link Copied! Send link to AI'));
+}
+function downloadJSON(){
+  const blob=new Blob([window._lastJSON],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='python-ascension-answers.json'; a.click();
+}
+function copyMarkdown(){
+  let md='# Python Ascension - My Answers\n\n';
+  questions.forEach(q=>{
+    const v=(localStorage.getItem('q'+q.id)||'').trim() || '_empty_';
+    md+=`**${q.id}. ${q.text}**\n> ${v}\n\n`;
+  });
+  navigator.clipboard.writeText(md).then(()=>toast('Markdown Copied!'));
+}
+function loadDemo(){
+  const demo=[
+    "Shadow","21","Intermediate - can build projects","3-4 hours","Night","Boring theory","Winning / leveling up","Not diagnosed but feels like it","No - left mid way","To get FAANG + prove I am best","Fear of being average","9",
+    "Solo Leveling (level up)","Dark + Serious + Epic","Little story - keep it light","Rank E -> S (Solo Leveling)","Both - linear + side quests","Yes - hard boss to unlock next world","Lose HP / Retry","Yes - swords, armor, titles","Yes - pet that evolves","Yes - epic music + SFX","Yes - punish if break","Yes","Global leaderboard","No solo","10-15 min","Level ups and boss fights",
+    "2 min quick","Text + code + diagram","5","Mix - MCQ + Debug + Write","Adaptive - AI adjusts to me","AI hint without giving answer","Detailed - why it works","No","Balanced","Yes - bring old questions back","Yes","Yes - shareable",
+    "variables, loops, functions, lists","recursion, decorators","Yes love them","Must cover deep","Yes deep","Yes - want greatest level","Yes","Yes","Yes - game per concept","CLI Apps","Yes - be pythonic","Yes latest","Both","loops","recursion",
+    "All - magic methods, metaclasses","Yes master it","Yes - all async","Yes - singleton, factory etc","Yes","Yes deep","Yes","Yes","Yes","Yes include","Yes","FastAPI (modern)","Yes deep","Yes - full dev","asyncio",
+    "Can do easy","FAANG crack","Inside same game as worlds","Theory + code","DP","Yes","Yes must","Yes deep","Yes","Yes","300","Balanced",
+    "All of above - become AI engineer","Yes","All","Yes - linear algebra, stats","Master","AI/ML Engineer","3 months","Yes - auto portfolio","Yes","Google",
+    "Yes - make it pro","A bit","Must - phone first","Dark - hacker","No","Yes","Yes make it viral","A game where every Python concept is a boss fight"
+  ];
+  questions.forEach((q,i)=>{
+    const v=demo[i]||'';
+    localStorage.setItem('q'+q.id, v);
+    const el=document.getElementById('q'+q.id);
+    if(el) el.value=v;
+    const valEl=document.getElementById('val'+q.id);
+    if(valEl) valEl.innerText=v;
+  });
+  updateProgress();
+  toast('Demo filled - edit and submit');
+}
+// auto load from hash
+window.addEventListener('load',()=>{
+  render();
+  if(location.hash.includes('data=')){
+    try{
+      const b64=location.hash.split('data=')[1];
+      const json=decodeURIComponent(escape(atob(b64)));
+      const data=JSON.parse(json);
+      const ans=data.answers||data;
+      Object.keys(ans).forEach(k=>{
+        const id=k.replace('Q','');
+        localStorage.setItem('q'+id, ans[k]);
+        const el=document.getElementById('q'+id);
+        if(el) el.value=ans[k];
+      });
+      updateProgress();
+      toast('Loaded shared answers');
+    }catch(e){}
+  }
+});
+</script>
+</body>
+</html>
