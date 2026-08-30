@@ -3,593 +3,291 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python Ascension - Solo Leveling RPG</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Python Mastery - Play & Learn</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 <style>
-:root{
-  --bg:#080a12;--bg2:#0f111a;--card:#141620;--card2:#1a1d2e;--border:#24273a;
-  --accent:#7c3aed;--accent2:#06b6d4;--accent3:#f59e0b;--success:#10b981;--danger:#ef4444;
-  --text:#e5e7eb;--muted:#9aa0b2;--rank-E:#6b7280;--rank-D:#3b82f6;--rank-C:#10b981;--rank-B:#8b5cf6;--rank-A:#f59e0b;--rank-S:#ef4444;
-}
-[data-theme="anime"]{--bg:#0a0a16;--card:#15152a;--accent:#ff3b7f;--accent2:#7c3aed}
-[data-theme="pixel"]{--bg:#0f0f0f;--card:#1a1a1a;--border:#333;--accent:#facc15;--accent2:#22c55e}
-[data-theme="hacker"]{--bg:#020a02;--card:#0a1a0a;--border:#1a3a1a;--accent:#00ff41;--accent2:#00d4ff;--text:#c8f5c8}
+:root{--bg:#f8f7ff;--card:#ffffff;--card2:#f1f0ff;--border:#e6e4ff;--accent:#7c3aed;--accent2:#06b6d4;--success:#10b981;--danger:#ef4444;--text:#1f2340;--muted:#6b7280}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;overflow-x:hidden}
-a{color:var(--accent2)}
-/* NAV */
-.nav{position:sticky;top:0;z-index:30;background:rgba(8,10,18,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-family:'Orbitron',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px;white-space:nowrap}
-.logo span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.rank-badge{padding:6px 10px;border-radius:8px;font-family:'Orbitron',sans-serif;font-weight:800;font-size:12px;border:1px solid}
-.rank-E{background:rgba(107,114,128,0.15);color:var(--rank-E);border-color:var(--rank-E)}
-.rank-D{background:rgba(59,130,246,0.15);color:var(--rank-D);border-color:var(--rank-D)}
-.rank-C{background:rgba(16,185,129,0.15);color:var(--rank-C);border-color:var(--rank-C)}
-.rank-B{background:rgba(139,92,246,0.15);color:var(--rank-B);border-color:var(--rank-B)}
-.rank-A{background:rgba(245,158,11,0.15);color:var(--rank-A);border-color:var(--rank-A)}
-.rank-S{background:rgba(239,68,68,0.15);color:var(--rank-S);border-color:var(--rank-S);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 8px rgba(239,68,68,0.4)}50%{box-shadow:0 0 16px rgba(239,68,68,0.8)}}
-.xp-wrap{flex:1;min-width:160px;max-width:320px}
-.xp-bg{height:8px;background:#1e2030;border-radius:999px;overflow:hidden}
-.xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:32%;transition:width .4s}
-.xp-text{font-size:10px;color:var(--muted);display:flex;justify-content:space-between;margin-top:4px}
-.stats{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.stat{background:var(--card2);border:1px solid var(--border);padding:6px 10px;border-radius:8px;font-size:11px;display:flex;gap:6px;align-items:center}
-.btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
-.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
-.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;border:none}
-.btn-ghost{background:transparent}
-.btn-small{padding:6px 10px;font-size:10px}
-/* LAYOUT */
-.layout{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:280px 1fr 300px;gap:14px;padding:14px}
-@media(max-width:1100px){.layout{grid-template-columns:260px 1fr}.right{display:none}}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.left{order:2}.right{order:3}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.card-head{padding:12px 14px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(124,58,237,0.12),rgba(6,182,214,0.06));display:flex;justify-content:space-between;align-items:center}
-.card-head h3{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:.5px}
-.scroll{max-height:calc(100vh - 180px);overflow:auto}
-@media(max-width:700px){.scroll{max-height:none}}
-/* LEFT MAP */
-.world{padding:10px 12px;border-bottom:1px solid rgba(36,39,58,0.6);cursor:pointer;transition:background .15s}
-.world:hover{background:rgba(124,58,237,0.06)}
-.world.active{background:linear-gradient(90deg,rgba(124,58,237,0.15),transparent);border-left:3px solid var(--accent)}
-.world.locked{opacity:.45;cursor:not-allowed}
-.world-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.world-title{font-weight:700;font-size:12px}
-.world-lvl{font-size:10px;background:var(--bg);border:1px solid var(--border);padding:2px 6px;border-radius:999px}
-.world-desc{font-size:10px;color:var(--muted);line-height:1.4}
-.progress-mini{height:4px;background:var(--bg2);border-radius:999px;overflow:hidden;margin-top:8px}
-.progress-mini-bar{height:100%;background:var(--success);width:0%}
-.levels{padding:8px 10px;display:grid;gap:6px}
-.lvl{padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:11px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.lvl.active{border-color:var(--accent);background:rgba(124,58,237,0.12)}
-.lvl.done{border-color:var(--success);background:rgba(16,185,129,0.08)}
-.lvl.locked{opacity:.4;cursor:not-allowed}
-.badge{font-size:9px;padding:2px 6px;border-radius:999px;background:var(--accent);color:white}
-.badge-boss{background:var(--danger)}
-/* CENTER */
-.center{padding:14px;display:grid;gap:14px}
-.hero{padding:16px;border-radius:12px;background:linear-gradient(135deg,rgba(124,58,237,0.18),rgba(6,182,214,0.12));border:1px solid rgba(124,58,237,0.25);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.hero h1{font-family:'Orbitron',sans-serif;font-size:16px}
-.hero p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
-.lesson{padding:14px;line-height:1.6;font-size:12.5px}
-.lesson h4{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--accent2);margin:12px 0 6px;letter-spacing:.6px}
-.lesson code{background:var(--bg2);border:1px solid var(--border);padding:2px 6px;border-radius:6px;font-size:12px}
-.lesson pre{background:#0a0a0a;border:1px solid var(--border);padding:12px;border-radius:8px;overflow:auto;margin:8px 0}
-.lesson pre code{border:none;padding:0;background:transparent}
-.battle{padding:14px}
-.battle-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
-.battle-title{font-weight:800;font-size:13px}
-.battle-meta{display:flex;gap:6px;flex-wrap:wrap}
-.meta{font-size:10px;padding:4px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--border)}
-.meta-xp{background:rgba(245,158,11,0.15);color:var(--accent3);border-color:rgba(245,158,11,0.3)}
-.tests{margin-top:12px;display:grid;gap:8px}
-.test{padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:11px}
-.test.ok{border-color:var(--success);background:rgba(16,185,129,0.08)}
-.test.fail{border-color:var(--danger);background:rgba(239,68,68,0.08)}
-.editor-wrap{margin-top:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.editor-bar{padding:8px 10px;background:var(--card2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-#editor{height:280px}
-@media(max-width:700px){#editor{height:240px}}
-.output{background:#050507;color:#10b981;padding:10px;font-size:11px;white-space:pre-wrap;min-height:48px;max-height:160px;overflow:auto;border-top:1px solid var(--border)}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-/* RIGHT */
-.stat-line{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(36,39,58,0.4);font-size:11px}
-.stat-line span:last-child{font-weight:700;color:var(--accent2)}
-.bookmark{padding:10px 14px;border-bottom:1px solid rgba(36,39,58,0.3);font-size:11px;cursor:pointer}
-.bookmark:hover{background:rgba(124,58,237,0.06)}
-.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
-.theme{padding:10px;border-radius:8px;border:1px solid var(--border);font-size:11px;cursor:pointer;text-align:center}
-.theme.active{border-color:var(--accent);background:rgba(124,58,237,0.12)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card2);border:1px solid var(--border);padding:12px 16px;border-radius:10px;font-size:12px;z-index:50;transition:transform .3s;max-width:92vw;text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+button{font-family:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:18px}
+.logo span{color:var(--accent)}
+.xp{flex:1;max-width:360px;background:var(--card2);height:10px;border-radius:999px;overflow:hidden}
+.xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:22%;transition:width .4s}
+.pill{padding:6px 12px;border-radius:999px;background:var(--card2);border:1px solid var(--border);font-size:12px;font-weight:700}
+.hero{text-align:center;padding:28px 16px}
+.hero h1{font-size:28px;font-weight:800}
+.hero p{color:var(--muted);max-width:520px;margin:8px auto;font-size:14px}
+.path{max-width:720px;margin:0 auto;padding:0 16px 40px;display:flex;flex-direction:column;align-items:center;gap:0}
+.node{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center}
+.node-line{width:4px;height:40px;background:var(--border)}
+.node-line.done{background:var(--success)}
+.node-btn{width:72px;height:72px;border-radius:50%;border:4px solid var(--border);background:var(--card);display:grid;place-items:center;font-size:28px;cursor:pointer;transition:all .15s;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
+.node-btn.active{border-color:var(--accent);transform:scale(1.05);box-shadow:0 8px 20px rgba(124,58,237,0.25)}
+.node-btn.done{background:var(--success);border-color:var(--success);color:white}
+.node-btn.locked{opacity:.45;cursor:not-allowed;background:var(--card2)}
+.node-label{margin-top:8px;text-align:center}
+.node-label b{font-size:13px}
+.node-label span{font-size:11px;color:var(--muted);display:block}
+.node-xp{margin-top:6px;font-size:11px;background:var(--accent);color:white;padding:3px 8px;border-radius:999px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:40}
+.modal.open{display:flex}
+.sheet{width:100%;max-width:860px;max-height:92vh;overflow:auto;background:var(--card);border-radius:18px;border:1px solid var(--border);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.sheet-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:1}
+.sheet-body{padding:16px 18px;display:grid;gap:16px}
+.lesson{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:13px;line-height:1.6}
+.lesson pre{background:#0b0b14;color:#e5e7eb;padding:12px;border-radius:8px;overflow:auto;margin:8px 0}
+.badge{font-size:10px;padding:4px 8px;border-radius:999px;background:var(--accent);color:white;font-weight:800}
+.tests{display:grid;gap:6px}
+.test{padding:8px 10px;border-radius:8px;background:var(--card2);border:1px solid var(--border);font-size:12px}
+.test.ok{border-color:var(--success);background:#ecfdf5}
+.test.fail{border-color:var(--danger);background:#fef2f2}
+.editor-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.editor-bar{padding:8px 12px;background:var(--card2);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#editor{height:260px}
+.output{background:#0b0b14;color:#10b981;padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;min-height:56px;white-space:pre-wrap}
+.btn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);font-weight:800;cursor:pointer}
+.btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+.btn-success{background:var(--success);color:white;border-color:var(--success)}
+.confetti{position:fixed;inset:0;pointer-events:none;display:none}
+.confetti.show{display:block}
+@media(max-width:600px){.hero h1{font-size:22px}#editor{height:220px}}
 </style>
 </head>
 <body>
-<div class="nav">
-  <div class="logo">PYTHON <span>ASCENSION</span></div>
-  <div id="rankBadge" class="rank-badge rank-E">RANK E</div>
-  <div class="xp-wrap">
-    <div class="xp-bg"><div id="xpBar" class="xp-bar"></div></div>
-    <div class="xp-text"><span id="xpText">0 / 100 XP</span><span id="lvlText">LVL 1</span></div>
+<div class="top">
+  <div class="logo">Python <span>Mastery</span></div>
+  <div style="display:flex;gap:8px;align-items:center;flex:1;max-width:380px">
+    <div class="xp"><div id="xpBar" class="xp-bar"></div></div>
+    <span style="font-size:12px;font-weight:800;white-space:nowrap" id="xpText">0/100 XP • Lv 1</span>
   </div>
-  <div class="stats">
-    <div class="stat">🔥 <span id="streak">Streak 1</span></div>
-    <div class="stat">⚔️ <span id="solved">0/500</span></div>
-    <button class="btn btn-small" id="musicBtn" onclick="toggleMusic()">🎵 Lo-fi: OFF</button>
-    <button class="btn btn-small" onclick="resetProgress()">Reset</button>
+  <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+    <span class="pill" id="streak">🔥 1 day</span>
+    <span class="pill" id="solved">0/500 done</span>
+    <button class="pill" onclick="toggleMusic()" id="mBtn">🎵 Off</button>
   </div>
 </div>
 
-<div class="layout">
-  <div class="card left">
-    <div class="card-head"><h3>WORLD MAP</h3><span style="font-size:10px;color:var(--muted)" id="worldCount">11 Worlds</span></div>
-    <div class="scroll" id="worldList"></div>
+<div class="hero">
+  <h1>Learn by playing</h1>
+  <p>Short lesson → code it → get XP. 15 minutes a day. No boring lectures.</p>
+  <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+    <span class="pill">✨ Simple</span><span class="pill">🎮 Game</span><span class="pill">🐍 Python A-Z</span>
   </div>
+</div>
 
-  <div class="center">
-    <div class="hero">
+<div class="path" id="path"></div>
+
+<div class="modal" id="modal" onclick="if(event.target===this) closeModal()">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div><b id="mTitle">Level 1</b><div id="mSub" style="font-size:11px;color:#6b7280">Variables</div></div>
+      <div style="display:flex;gap:8px">
+        <span id="mXp" class="badge">+20 XP</span>
+        <button class="btn" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <div id="mLesson" class="lesson"></div>
       <div>
-        <h1 id="heroTitle">Welcome, Hunter</h1>
-        <p id="heroDesc">Your Solo Leveling begins. Clear World 1 to rank up. Every battle gives XP. Fail = auto-bookmark to Revise Dungeon.</p>
+        <div style="font-weight:800;margin-bottom:6px" id="mProbTitle"></div>
+        <div style="font-size:13px;color:#4b5563" id="mProbDesc"></div>
+        <div class="tests" id="mTests" style="margin-top:10px"></div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn btn-primary" onclick="scrollToBattle()">⚔️ BATTLE</button>
-        <button class="btn" onclick="showRevise()">📚 Revise</button>
+      <div class="editor-wrap">
+        <div class="editor-bar">
+          <span style="font-weight:800;font-size:12px">Your code</span>
+          <span style="display:flex;gap:6px">
+            <button class="btn" style="padding:6px 10px" onclick="resetCode()">Reset</button>
+            <button class="btn" style="padding:6px 10px" onclick="runCode()">▶ Run</button>
+            <button class="btn btn-primary" style="padding:6px 12px" onclick="submitCode()">Submit</button>
+          </span>
+        </div>
+        <div id="editor"></div>
+        <div id="output" class="output">Output shows here. Python loads in 2 sec...</div>
       </div>
-    </div>
-
-    <div class="card" id="lessonCard">
-      <div class="card-head"><h3 id="lessonTitle">Lesson</h3><span style="font-size:10px;color:var(--muted)" id="lessonMeta">2 min</span></div>
-      <div class="lesson" id="lessonBody">Loading...</div>
-    </div>
-
-    <div class="card" id="battleCard">
-      <div class="card-head"><h3 id="battleTitle">Code Battle</h3><span id="battleXp" class="badge">+20 XP</span></div>
-      <div class="battle">
-        <div class="battle-head">
-          <div>
-            <div id="battleDesc" style="font-size:12px;line-height:1.5;color:var(--muted)">Select a battle</div>
-            <div class="battle-meta" style="margin-top:8px" id="battleMeta"></div>
-          </div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-small" onclick="getHint()">💡 Hint (-5 XP)</button>
-            <button class="btn btn-small" onclick="bookmarkCurrent()">🔖 Bookmark</button>
-          </div>
-        </div>
-        <div class="tests" id="tests"></div>
-        <div class="editor-wrap">
-          <div class="editor-bar">
-            <span style="font-size:11px;font-weight:600">editor.py</span>
-            <span style="display:flex;gap:6px;align-items:center">
-              <label style="font-size:11px;display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="vimToggle" onchange="toggleVim()"> VIM</label>
-              <button class="btn btn-small" onclick="resetCode()">Reset</button>
-              <button class="btn btn-small" onclick="runCode()">▶ Run</button>
-              <button class="btn btn-primary btn-small" onclick="submitCode()">⚡ Submit</button>
-            </span>
-          </div>
-          <div id="editor"></div>
-          <div id="output" class="output">Output will appear here... (Pyodide loads in 3 sec)</div>
-        </div>
-        <div class="actions">
-          <button class="btn" onclick="prevBattle()">← Prev</button>
-          <button class="btn btn-primary" onclick="nextBattle()">Next →</button>
-          <span style="font-size:11px;color:var(--muted);align-self:center" id="autoHint">Fail 3x to unlock resource + auto-revise</span>
-        </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="getHint()">💡 Hint</button>
+        <button class="btn" onclick="showSolution()">Show example</button>
+        <span style="font-size:11px;color:#6b7280;align-self:center" id="hintText">Stuck? Use Hint, no penalty first time.</span>
       </div>
     </div>
-
-    <div class="card" style="padding:12px;font-size:11px;color:var(--muted);text-align:center">
-      Built for you • 500+ battles A-Z • Python + DSA (FAANG) + AI + System Design • No lag • Made for 15 min daily grind • <a href="https://github.com/PhaNtoM-GHosT-11101/python-ascension" target="_blank">GitHub</a>
-    </div>
-  </div>
-
-  <div class="card right">
-    <div class="card-head"><h3>HUNTER STATS</h3></div>
-    <div class="stat-line"><span>Rank</span><span id="statRank">E</span></div>
-    <div class="stat-line"><span>Level</span><span id="statLvl">1</span></div>
-    <div class="stat-line"><span>XP</span><span id="statXp">0</span></div>
-    <div class="stat-line"><span>Battles Won</span><span id="statWon">0 / 500</span></div>
-    <div class="stat-line"><span>Streak</span><span id="statStreak">1 day</span></div>
-    <div class="stat-line"><span>Bookmarks</span><span id="statBookmarks">0</span></div>
-
-    <div class="card-head" style="margin-top:8px"><h3>REVISE DUNGEON</h3><span style="font-size:10px;color:var(--danger)" id="reviseCount">0 due</span></div>
-    <div id="reviseList" style="max-height:160px;overflow:auto"></div>
-
-    <div class="card-head" style="margin-top:8px"><h3>THEMES (no lag)</h3></div>
-    <div class="theme-grid">
-      <div class="theme active" onclick="setTheme('default')">🌑 Dark</div>
-      <div class="theme" onclick="setTheme('anime')">🌸 Anime</div>
-      <div class="theme" onclick="setTheme('pixel')">👾 Pixel</div>
-      <div class="theme" onclick="setTheme('hacker')">💚 Hacker</div>
-    </div>
-
-    <div class="card-head"><h3>LOOT</h3></div>
-    <div id="loot" style="padding:10px;font-size:11px;line-height:1.6">Win battles to evolve your shadow pet 🐺<br>Rank D: Shadow Wolf<br>Rank B: Shadow Dragon<br>Rank S: Monarch</div>
   </div>
 </div>
 
-<div id="toast" class="toast"></div>
+<canvas id="confetti" class="confetti"></canvas>
 <audio id="lofi" loop preload="none" src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_fbd14dd6bc.mp3?filename=lofi-study-112191.mp3"></audio>
 
 <script>
-// ---------- DATA: 11 Worlds A-Z ----------
-const worlds = [
-  {
-    id:'w1', title:'World 1: Genesis', desc:'Variables, Types, Input/Output', icon:'🌱', levels:[
-      {id:'w1l1', title:'Lvl 1 - Mana Crystals (Variables)', type:'lesson', xp:20, lessonTitle:'Variables', time:'2 min', lesson:`
-      <p><b>Variables</b> are mana crystals that store value.</p>
-      <pre><code>x = 10
-name = "Shadow"
-print(x)</code></pre>
-      <h4>💡 Trick</h4><p><code>a = [[]]*3</code> creates 3 refs to SAME list - trap!</p>
-      <h4>Forgetting Curve</h4><p>Fail this battle → auto-bookmark + revise tomorrow.</p>
-      `, battles:[
-        {id:'w1l1b1', title:'Summon Variable', type:'write', xp:20, desc:'Create variable <code>a = 10</code> and print it.', starter:`# create a = 10 and print(a)\n`, hint:'Use a = 10 on line1, print(a) on line2', resource:'https://docs.python.org/3/tutorial/introduction.html', tests:[{input:'', expected:'10\n', vis:true}], solution:`a=10\nprint(a)`},
-        {id:'w1l1b2', title:'Debug: Broken Spell', type:'debug', xp:25, desc:'Fix this code - it should print 25', starter:`x = "5"\ny = 5\nprint(x + y)  # fix this\n`, hint:'One is string "5", convert with int()', resource:'https://docs.python.org/3/library/functions.html#int', tests:[{expected:'10\n', vis:true}], solution:`x = "5"\ny = 5\nprint(int(x) + y)`},
-        {id:'w1l1b3', title:'Fill the Blank', type:'fill', xp:20, desc:'Complete to print <code>Hi Shadow</code>', starter:`name = ___\nprint(f"Hi {name}")\n`, hint:`name = "Shadow"`, resource:'https://docs.python.org/3/tutorial/inputoutput.html', tests:[{expected:'Hi Shadow\n', vis:true}], solution:`name = "Shadow"\nprint(f"Hi {name}")`},
-        {id:'w1l1b4', title:'Input Gate', type:'write', xp:30, desc:'Read integer n and print n*2. (We test with input 7 -> 14)', starter:`# read n\n# print n*2\n`, hint:'n = int(input()) then print(n*2)', resource:'https://docs.python.org/3/library/functions.html#input', tests:[{input:'7\n', expected:'14\n', vis:true},{input:'0\n', expected:'0\n', vis:false}], solution:`n=int(input())\nprint(n*2)`},
-        {id:'w1l1b5', title:'Boss: Type Alchemist', type:'write', xp:50, desc:'Given input string s, print its length and type name (e.g. input "hi" -> "2 str"). We pass "hello" -> "5 str" and "123" -> "3 str"', starter:`s = input()\n# print f"{len(s)} {type(s).__name__}"\n`, hint:'print(f"{len(s)} {type(s).__name__}")', resource:'https://docs.python.org/3/library/functions.html#type', tests:[{input:'hello\n', expected:'5 str\n', vis:true},{input:'123\n', expected:'3 str\n', vis:false}], solution:`s=input()\nprint(f"{len(s)} {type(s).__name__}")`}
-      ]},
-      {id:'w1l2', title:'Lvl 2 - Data Runes', type:'lesson', xp:25, battles:[
-        {id:'w1l2b1', title:'List Slice Trap', type:'write', xp:30, desc:'Create list a=[1,2,3] and print a[1:3] -> should be [2, 3]', starter:`a=[1,2,3]\n# print slice\n`, hint:'print(a[1:3])', resource:'https://docs.python.org/3/tutorial/introduction.html#lists', tests:[{expected:'[2, 3]\n', vis:true}], solution:`a=[1,2,3]\nprint(a[1:3])`}
-      ]}
-    ]
-  },
-  {id:'w2', title:'World 2: Logic Gate', desc:'If/Else, Loops, Comprehensions', icon:'🔀', levels:[
-    {id:'w2l1', title:'Lvl 6 - Branching', type:'lesson', lesson:`<p>if/else, for, while, list comprehensions</p><pre><code># pythonic
-[x*2 for x in range(5) if x%2==0]</code></pre>`, battles:[
-      {id:'w2l1b1', title:'FizzBuzz Mini', type:'write', xp:30, desc:'Read n, print Fizz if div3, Buzz if div5, FizzBuzz if both, else n. Test n=15 -> FizzBuzz', starter:`n=int(input())\n# fizzbuzz\n`, hint:'if n%15==0:', tests:[{input:'15\n', expected:'FizzBuzz\n', vis:true},{input:'9\n', expected:'Fizz\n', vis:false}], solution:`n=int(input())\nif n%15==0: print("FizzBuzz")\nelif n%3==0: print("Fizz")\nelif n%5==0: print("Buzz")\nelse: print(n)`}
-    ]}
-  ]},
-  {id:'w3', title:'World 3: Function Forge', desc:'Functions, Recursion, Lambdas', icon:'🔧', levels:[]},
-  {id:'w4', title:'World 4: Data Dungeon', desc:'Lists, Dicts, Sets, Tuples (Deep)', icon:'📦', levels:[]},
-  {id:'w5', title:'World 5: OOP Colosseum', desc:'Classes, Magic Methods, Metaclasses', icon:'🏛️', levels:[]},
-  {id:'w6', title:'World 6: Advanced Abyss', desc:'Decorators, Generators, Context Managers', icon:'🌀', levels:[]},
-  {id:'w7', title:'World 7: Async Void', desc:'Asyncio, Threading, Multiprocessing, GIL', icon:'⚡', levels:[]},
-  {id:'w8', title:'World 8: DSA Dungeon', desc:'Arrays, Hashing, Two Pointers, Sliding Window, Stack, Queue (150 battles)', icon:'⚔️', levels:[]},
-  {id:'w9', title:'World 9: DSA Abyss', desc:'Linked List, Trees, Graphs, Heap, DP - FAANG Hard', icon:'🐉', levels:[]},
-  {id:'w10', title:'World 10: AI Frontier', desc:'Numpy, Pandas, RAG, Chatbots, Automation', icon:'🧠', levels:[]},
-  {id:'w11', title:'World 11: System Fortress', desc:'FastAPI, SQL, Redis, Docker, Git, Pytest, Deploy - Boss: Ship to prod', icon:'🏰', levels:[]},
+// DATA - Simple normal language, 500 total plan but show path clean
+const levels = [
+  {id:'l1', title:'Variables', emoji:'①', desc:'Store values', xp:20, lesson:`<b>Variables store values.</b><br><br><pre>x = 10\nname = "Ava"\nprint(x)</pre>Tip: <code>a = 5</code> then <code>print(a)</code> shows 5.`, prob:{title:'Create a variable', desc:'Create variable <b>a = 10</b> and print it.', starter:'# create a = 10\n', hint:'a = 10 then print(a)', solution:'a=10\nprint(a)', tests:[{exp:'10\n', vis:true}]}},
+  {id:'l2', title:'Fix the bug', emoji:'②', desc:'Find the mistake', xp:25, lesson:`<b>Types matter.</b> "5" is text, 5 is number. Can't add text + number.<br><pre>int("5") → 5</pre>`, prob:{title:'Fix it', desc:'This code crashes. Fix it to print <b>10</b>.', starter:'x = "5"\ny = 5\nprint(x + y)\n', hint:'Change x + y to int(x) + y', solution:'x="5"\ny=5\nprint(int(x)+y)', tests:[{exp:'10\n', vis:true}]}},
+  {id:'l3', title:'Your name', emoji:'③', desc:'Use text', xp:20, lesson:`<b>f-strings</b> make text easy.<br><pre>name = "Sam"\nprint(f"Hi {name}")</pre>`, prob:{title:'Say hi', desc:'Make <code>name = "Shadow"</code> then print <code>Hi Shadow</code>', starter:'name = ""\n', hint:'name = "Shadow"', solution:'name="Shadow"\nprint(f"Hi {name}")', tests:[{exp:'Hi Shadow\n', vis:true}]}},
+  {id:'l4', title:'Double it', emoji:'④', desc:'Read input', xp:30, lesson:`<b>input()</b> reads what user types.<br><pre>n = int(input())\nprint(n*2)</pre>If user types 7, it prints 14.`, prob:{title:'Double the number', desc:'Read a number and print double. (We test with 7 → 14)', starter:'# read n and print n*2\n', hint:'n = int(input())', solution:'n=int(input())\nprint(n*2)', tests:[{inp:'7\n', exp:'14\n', vis:true},{inp:'3\n', exp:'6\n', vis:false}]}},
+  {id:'l5', title:'Boss: Check type', emoji:'★', desc:'Final for World 1', xp:50, lesson:`<b>type() tells the type.</b><br><pre>s = "hi"\nprint(len(s), type(s).__name__)</pre>`, prob:{title:'Boss: Length + type', desc:'Read text and print <code>length type</code> . Example: "hello" → "5 str"', starter:'s = input()\n', hint:'print(f"{len(s)} {type(s).__name__}")', solution:'s=input()\nprint(f"{len(s)} {type(s).__name__}")', tests:[{inp:'hello\n', exp:'5 str\n', vis:true},{inp:'hi\n', exp:'2 str\n', vis:false}]}},
+  {id:'l6', title:'If / Else', emoji:'⑥', desc:'Make choices', xp:30, lesson:`<b>if</b> lets code decide.<br><pre>if n%2==0:\n  print("even")\nelse:\n  print("odd")</pre>`, prob:{title:'Even or odd?', desc:'Read n, print "even" or "odd"', starter:'n=int(input())\n', hint:'if n%2==0: print("even") else: print("odd")', solution:'n=int(input())\nprint("even" if n%2==0 else "odd")', tests:[{inp:'4\n', exp:'even\n', vis:true},{inp:'3\n', exp:'odd\n', vis:false}]}},
+  {id:'l7', title:'Loops', emoji:'⑦', desc:'Repeat', xp:30, lesson:`<b>for</b> repeats.<br><pre>for i in range(3):\n  print(i)</pre>`, prob:{title:'Print 1 to n', desc:'Read n, print 1..n each on new line. n=3 → 1 2 3', starter:'n=int(input())\n', hint:'for i in range(1,n+1): print(i)', solution:'n=int(input())\nfor i in range(1,n+1): print(i)', tests:[{inp:'3\n', exp:'1\n2\n3\n', vis:true}]}},
+  // placeholders to show path length but locked as coming soon
+  {id:'l8', title:'Functions', emoji:'⑧', desc:'Coming next', xp:30, locked:true},
+  {id:'l9', title:'Lists', emoji:'⑨', desc:'Coming next', xp:30, locked:true},
+  {id:'l10', title:'Dictionaries', emoji:'⑩', desc:'Coming next', xp:30, locked:true},
 ];
 
-// Expand placeholder worlds with lock info
-let totalBattles=0; worlds.forEach(w=> w.levels.forEach(l=> totalBattles+= (l.battles?l.battles.length:0)));
-if(totalBattles<10) totalBattles=500; // display goal
+let state = JSON.parse(localStorage.getItem('pm_state')||'null') || {xp:0,lvl:1,done:[],streak:1,last:new Date().toDateString()};
+function save(){ localStorage.setItem('pm_state', JSON.stringify(state)); render(); }
+function rank(){ if(state.xp>=3500) return 'S'; if(state.xp>=2000) return 'A'; if(state.xp>=1200) return 'B'; if(state.xp>=600) return 'C'; if(state.xp>=200) return 'D'; return 'E'; }
 
-// ---------- STATE ----------
-let state = JSON.parse(localStorage.getItem('pa_state')||'null') || {
-  xp:0, lvl:1, rank:'E', solved:0, streak:1, lastDate:new Date().toDateString(),
-  curW:'w1', curL:'w1l1', curB:'w1l1b1', bookmarks:[], fails:{}, unlocked:['w1']
-};
-function rankForXp(xp){
-  if(xp>=3500) return 'S';
-  if(xp>=2000) return 'A';
-  if(xp>=1200) return 'B';
-  if(xp>=600) return 'C';
-  if(xp>=200) return 'D';
-  return 'E';
-}
-function save(){ localStorage.setItem('pa_state', JSON.stringify(state)); renderStats(); }
-function addXp(n){
-  state.xp+=n;
-  state.solved++;
-  let need = state.lvl*100;
-  if(state.xp>=need){ state.lvl++; toast(`🎉 LVL UP! Now LVL ${state.lvl}`); playSfx(true); }
-  state.rank=rankForXp(state.xp);
-  // unlock next world every 3 levels
-  if(state.lvl>=3 && !state.unlocked.includes('w2')) state.unlocked.push('w2');
-  if(state.lvl>=6 && !state.unlocked.includes('w3')) state.unlocked.push('w3');
-  if(state.solved>=5 && !state.unlocked.includes('w8')) state.unlocked.push('w8'); // early DSA
-  save();
-}
-
-// ---------- RENDER ----------
-function renderWorlds(){
-  const el=document.getElementById('worldList');
-  let h='';
-  worlds.forEach(w=>{
-    const isUnlocked = state.unlocked.includes(w.id);
-    const active = state.curW===w.id;
-    const progress = 0;
-    h+=`<div class="world ${active?'active':''} ${isUnlocked?'':'locked'}" onclick="selectWorld('${w.id}')">
-      <div class="world-top"><span class="world-title">${w.icon} ${w.title}</span><span class="world-lvl">${w.levels.length||'??'} lvls</span></div>
-      <div class="world-desc">${w.desc}</div>
-      <div class="progress-mini"><div class="progress-mini-bar" style="width:${progress}%"></div></div>
-      ${!isUnlocked?'<div style="font-size:10px;color:var(--danger);margin-top:6px">🔒 Reach LVL '+(w.id==='w2'?'3':w.id==='w3'?'6':'10')+' to unlock</div>':''}
-    </div>`;
-    if(active){
-      h+=`<div class="levels">`;
-      w.levels.forEach(l=>{
-        const la = state.curL===l.id;
-        const done = false;
-        h+=`<div class="lvl ${la?'active':''} ${done?'done':''}" onclick="event.stopPropagation();selectLevel('${l.id}')">
-          <span>${l.title}</span>${l.battles?`<span class="badge">${l.battles.length}</span>`:''}
-        </div>`;
-      });
-      if(w.levels.length===0) h+=`<div class="levels"><div class="lvl locked">🔒 Battles loading... 500 total in build</div></div>`;
-      h+=`</div>`;
-    }
+function render(){
+  document.getElementById('xpBar').style.width = Math.min(100, (state.xp%100))+'%';
+  document.getElementById('xpText').innerText = `${state.xp} XP • Lv ${state.lvl} • Rank ${rank()}`;
+  document.getElementById('streak').innerText = `🔥 ${state.streak} day`;
+  document.getElementById('solved').innerText = `${state.done.length}/500 done`;
+  const path=document.getElementById('path');
+  path.innerHTML='';
+  levels.forEach((lv,i)=>{
+    const done = state.done.includes(lv.id);
+    const isNext = !done && (i===0 || state.done.includes(levels[i-1].id));
+    const locked = lv.locked || (!done && !isNext);
+    const lineClass = done ? 'done' : '';
+    path.innerHTML+=`
+      ${i>0?`<div class="node-line ${levels[i-1] && state.done.includes(levels[i-1].id)?'done':''}"></div>`:''}
+      <div class="node">
+        <button class="node-btn ${done?'done':''} ${locked?'locked':''} ${isNext?'active':''}" onclick="openLevel('${lv.id}')">
+          ${done?'✓':lv.emoji}
+        </button>
+        <div class="node-label"><b>${lv.title}</b><span>${lv.desc}</span></div>
+        <span class="node-xp">+${lv.xp} XP ${done?'• done':''}</span>
+      </div>
+    `;
   });
-  el.innerHTML=h;
-  document.getElementById('worldCount').innerText=worlds.length+' Worlds • 500+ Battles';
-}
-function getBattleById(id){
-  for(let w of worlds) for(let l of w.levels) for(let b of (l.battles||[])) if(b.id===id) return {b,l,w};
-  return null;
-}
-function getLevelById(id){
-  for(let w of worlds) for(let l of w.levels) if(l.id===id) return {l,w};
+  // locked footer
+  path.innerHTML+=`<div class="node-line"></div><div style="padding:16px;background:var(--card);border:1px dashed var(--border);border-radius:12px;margin-top:12px;text-align:center;max-width:420px;width:100%"><b>490 more levels</b><div style="font-size:12px;color:#6b7280">Functions → OOP → Decorators → Async → DSA (150) → Graphs/DP → AI → FastAPI. Unlocks as you play.</div><div style="font-size:11px;margin-top:6px;color:var(--accent)">500 total • No overwhelm — one step at a time</div></div>`;
 }
 let cur=null;
-function selectWorld(id){
-  if(!state.unlocked.includes(id)) { toast('🔒 Complete previous worlds to unlock'); return; }
-  state.curW=id;
-  const w=worlds.find(x=>x.id===id);
-  if(w.levels[0]) { state.curL=w.levels[0].id; if(w.levels[0].battles && w.levels[0].battles[0]) state.curB=w.levels[0].battles[0].id; }
-  save(); renderAll();
-}
-function selectLevel(id){
-  const res=getLevelById(id);
-  if(!res) return;
-  state.curL=id; state.curW=res.w.id;
-  if(res.l.battles && res.l.battles[0]) state.curB=res.l.battles[0].id;
-  save(); renderAll();
-}
-function selectBattle(id){
-  state.curB=id;
-  const r=getBattleById(id);
-  if(r){ state.curL=r.l.id; state.curW=r.w.id; }
-  save(); renderAll();
-}
-function renderLesson(){
-  const lvl = getLevelById(state.curL);
-  if(!lvl){ document.getElementById('lessonBody').innerHTML='Select a level'; return; }
-  document.getElementById('lessonTitle').innerText=lvl.l.title;
-  document.getElementById('lessonMeta').innerText=lvl.l.xp?lvl.l.xp+' XP':'';
-  document.getElementById('lessonBody').innerHTML = lvl.l.lesson || '<p style="color:var(--muted)">Lesson coming - this world covers '+lvl.w.desc+'</p><p>500 battles A-Z are being built. World 1 is fully playable now. Others unlock as you rank up.</p>';
-  document.getElementById('heroTitle').innerText = lvl.w.icon+' '+lvl.w.title;
-  document.getElementById('heroDesc').innerText = lvl.l.title + ' • ' + (lvl.w.desc);
-}
-function renderBattle(){
-  const r=getBattleById(state.curB);
-  if(!r){ document.getElementById('battleDesc').innerHTML='Select a battle from left. World 1 is ready - 5 battles.'; return; }
-  cur=r.b;
-  document.getElementById('battleTitle').innerText=cur.title;
-  document.getElementById('battleXp').innerText='+'+cur.xp+' XP';
-  document.getElementById('battleDesc').innerHTML=cur.desc;
-  document.getElementById('battleMeta').innerHTML=`<span class="meta">${cur.type}</span><span class="meta meta-xp">${cur.xp} XP</span><span class="meta">${r.w.title}</span>`;
-  let th='';
-  cur.tests.forEach((t,i)=>{
-    th+=`<div class="test">${t.vis?`✅ Visible ${i+1}: input <code>${escapeHtml(t.input||'∅')}</code> → expect <code>${escapeHtml(t.expected)}</code>`:`🔒 Hidden test ${i+1} (pass to rank up)`}</div>`;
-  });
-  document.getElementById('tests').innerHTML=th;
-  if(window.editor) window.editor.setValue(cur.starter);
-  else document.getElementById('output').innerText='Editor loading...';
-  document.getElementById('autoHint').innerText = state.fails[cur.id]>=2 ? `❗ 2 fails - hint available - 1 more fail → resource + bookmark` : `Fail 3x to unlock resource + auto-bookmark`;
-}
-function renderStats(){
-  document.getElementById('rankBadge').innerText='RANK '+state.rank;
-  document.getElementById('rankBadge').className='rank-badge rank-'+state.rank;
-  document.getElementById('xpBar').style.width=Math.min(100, (state.xp %100))+'%';
-  document.getElementById('xpText').innerText=state.xp + ' / ' + (state.lvl*100) + ' XP';
-  document.getElementById('lvlText').innerText='LVL '+state.lvl;
-  document.getElementById('solved').innerText=state.solved+'/500';
-  document.getElementById('statRank').innerText=state.rank;
-  document.getElementById('statLvl').innerText=state.lvl;
-  document.getElementById('statXp').innerText=state.xp;
-  document.getElementById('statWon').innerText=state.solved+' / 500';
-  document.getElementById('statStreak').innerText=state.streak+' day';
-  document.getElementById('streak').innerText='Streak '+state.streak;
-  document.getElementById('statBookmarks').innerText=state.bookmarks.length;
-  document.getElementById('reviseCount').innerText=state.bookmarks.length+' due';
-  // revise list
-  const rl=document.getElementById('reviseList');
-  if(state.bookmarks.length===0) rl.innerHTML='<div style="padding:12px;color:var(--muted);font-size:11px">No bookmarks - fail a battle to auto-bookmark for forgetting curve</div>';
-  else rl.innerHTML=state.bookmarks.slice(0,6).map(id=>{
-    const b=getBattleById(id);
-    return `<div class="bookmark" onclick="selectBattle('${id}')">🔖 ${b?b.b.title:id}</div>`;
-  }).join('');
-}
-function renderAll(){ renderWorlds(); renderLesson(); renderBattle(); renderStats(); }
-function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function toast(m){ const t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
-function scrollToBattle(){ document.getElementById('battleCard').scrollIntoView({behavior:'smooth'}); }
-function showRevise(){ document.querySelector('.right').scrollIntoView({behavior:'smooth'}); toast('📚 Revise Dungeon - click bookmark to retry'); }
-
-// ---------- EDITOR ----------
 let pyodide=null;
 async function initPy(){
-  try{
-    pyodide = await loadPyodide();
-    document.getElementById('output').innerText='✅ Python ready (Pyodide) - no lag - run your code';
-  }catch(e){ document.getElementById('output').innerText='Pyodide load failed, retry refresh: '+e; }
+  try{ pyodide=await loadPyodide(); document.getElementById('output').innerText='Ready — write code and press Run'; }catch(e){ document.getElementById('output').innerText='Python load failed: '+e}
 }
 initPy();
 require.config({paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'}});
-require(['vs/editor/editor.main'],()=>{
-  window.editor = monaco.editor.create(document.getElementById('editor'),{
-    value:getBattleById(state.curB)?.b.starter || '# start coding\n',
-    language:'python',
-    theme:'vs-dark',
-    fontSize:13,
-    minimap:{enabled:false},
-    automaticLayout:true,
-    wordWrap:'on'
-  });
-  renderBattle();
-});
-function toggleVim(){
-  const on=document.getElementById('vimToggle').checked;
-  toast(on?'VIM: ON (use h j k l, :w not needed)':'VIM: OFF');
-  // Monaco vim requires extra lib - for now we toggle keybinding hint. Full vim comes in v1.1 (no heavy load now to keep no-lag)
+require(['vs/editor/editor.main'],()=>{ window.editor = monaco.editor.create(document.getElementById('editor'),{value:'# start\n',language:'python',theme:'vs',fontSize:13,minimap:{enabled:false},automaticLayout:true,wordWrap:'on'}); });
+
+function openLevel(id){
+  const lv=levels.find(x=>x.id===id);
+  if(!lv) return;
+  if(lv.locked) return toast('Finish previous level to unlock');
+  const done=state.done.includes(id);
+  const nextIdx=levels.findIndex(x=>x.id===id);
+  const isNext = !done && (nextIdx===0 || state.done.includes(levels[nextIdx-1].id));
+  if(!done && !isNext && nextIdx!==0) return toast('Do previous level first');
+  cur=lv;
+  document.getElementById('mTitle').innerText=lv.emoji+' '+lv.title;
+  document.getElementById('mSub').innerText=lv.desc+' • +'+lv.xp+' XP';
+  document.getElementById('mXp').innerText='+'+lv.xp+' XP';
+  document.getElementById('mLesson').innerHTML=lv.lesson;
+  document.getElementById('mProbTitle').innerText=lv.prob.title;
+  document.getElementById('mProbDesc').innerHTML=lv.prob.desc;
+  document.getElementById('mTests').innerHTML=lv.prob.tests.map((t,i)=>`<div class="test">${t.vis?`Example ${i+1}: expect <code>${esc(t.exp)}</code> ${t.inp?`from input <code>${esc(t.inp)}</code>`:''}`:`🔒 Hidden test ${i+1}`}</div>`).join('');
+  if(window.editor) window.editor.setValue(lv.prob.starter);
+  document.getElementById('output').innerText='Press Run to test';
+  document.getElementById('modal').classList.add('open');
 }
-function resetCode(){ if(cur && window.editor) window.editor.setValue(cur.starter); document.getElementById('output').innerText='Reset done';}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'↵'); }
+function resetCode(){ if(cur) window.editor.setValue(cur.prob.starter); }
 async function runCode(){
   if(!pyodide) return toast('Python still loading...');
-  const code = window.editor.getValue();
-  const outEl=document.getElementById('output');
-  outEl.innerText='⏳ Running...';
+  const code=window.editor.getValue();
+  const out=document.getElementById('output');
+  out.innerText='Running...';
   try{
-    // capture stdout
-    let result = await pyodide.runPythonAsync(`
+    const sc=code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
+    const res=await pyodide.runPythonAsync(`
 import sys, io, traceback
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-code = """${code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"')}"""
+sys.stdout=io.StringIO()
+sys.stderr=io.StringIO()
+code="""${sc}"""
 try:
     exec(code, {})
-    out = sys.stdout.getvalue()
-    err = sys.stderr.getvalue()
-    (out + err) if (out or err) else "✅ No output (no print?)"
-except Exception as e:
+    sys.stdout.getvalue() + sys.stderr.getvalue() or "No output — did you print?"
+except Exception:
     traceback.format_exc()
 `);
-    outEl.innerText=result;
-  }catch(e){ outEl.innerText='Error: '+e; }
+    out.innerText=res;
+  }catch(e){ out.innerText='Error: '+e; }
 }
 async function submitCode(){
   if(!cur) return;
   if(!pyodide) return toast('Wait for Python...');
-  const code = window.editor.getValue();
-  const outEl=document.getElementById('output');
-  outEl.innerText='🧪 Testing... (visible + hidden)';
-  let allPass=true;
-  let logs=[];
-  for(let i=0;i<cur.tests.length;i++){
-    const t=cur.tests[i];
+  const code=window.editor.getValue();
+  const out=document.getElementById('output');
+  out.innerText='Checking...';
+  let logs=[]; let ok=true;
+  for(let t of cur.prob.tests){
+    const sc=code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
+    const inp=(t.inp||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n');
+    const exp=t.exp;
     try{
-      const expected = t.expected;
-      const inputVal = t.input || '';
-      // escape for python string
-      const escCode = code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
-      const escInput = inputVal.replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n');
-      const res = await pyodide.runPythonAsync(`
+      const res=await pyodide.runPythonAsync(`
 import sys, io, traceback, builtins
-# mock input
-_inputs = """${escInput}""".splitlines(True)
-_iter = iter(_inputs)
+_inputs="""${inp}""".splitlines(True)
+_it=iter(_inputs)
 def mock_input(prompt=""):
-    try:
-        return next(_iter).rstrip("\\n")
-    except StopIteration:
-        return ""
-builtins.input = mock_input
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-code = """${escCode}"""
+    try: return next(_it).rstrip("\\n")
+    except: return ""
+builtins.input=mock_input
+sys.stdout=io.StringIO()
+code="""${sc}"""
 try:
     exec(code, {})
     sys.stdout.getvalue()
-except Exception as e:
+except Exception:
     traceback.format_exc()
 `);
-      const pass = res === expected;
-      logs.push((pass?'✅':'❌')+' Test '+(i+1)+(t.vis?' (visible)':' (hidden)')+': '+(pass?'PASS':`FAIL - got ${JSON.stringify(res)} expect ${JSON.stringify(expected)}`));
-      if(!pass) allPass=false;
-    }catch(e){ logs.push('❌ Test '+(i+1)+' error '+e); allPass=false; }
+      const pass=res===exp;
+      logs.push((pass?'✅':'❌')+' '+(t.vis?'Example':'Hidden')+' '+(pass?'pass':`fail — got ${JSON.stringify(res)}`));
+      if(!pass) ok=false;
+    }catch(e){ logs.push('❌ error '+e); ok=false; }
   }
-  outEl.innerText=logs.join('\n');
-  // handle fail book-keeping
-  if(allPass){
-    playSfx(true);
-    addXp(cur.xp);
-    toast(`⚔️ Victory! +${cur.xp} XP - ${cur.title}`);
-    // auto next
-    setTimeout(()=>nextBattle(),800);
+  out.innerText=logs.join('\n');
+  if(ok){
+    if(!state.done.includes(cur.id)){
+      state.done.push(cur.id);
+      state.xp+=cur.xp;
+      if(state.xp >= state.lvl*100){ state.lvl++; toast(`Level up! Now Lv ${state.lvl}`); confettiEffect(); }
+      else toast(`+${cur.xp} XP!`);
+      // streak
+      const today=new Date().toDateString();
+      if(state.last!==today){ state.streak++; state.last=today; }
+      save();
+    } else toast('Already done — +0 XP but good practice!');
+    setTimeout(()=>{ closeModal(); render(); confettiEffect(); }, 800);
   } else {
-    playSfx(false);
-    state.fails[cur.id]=(state.fails[cur.id]||0)+1;
-    if(state.fails[cur.id]>=3){
-      if(!state.bookmarks.includes(cur.id)) state.bookmarks.push(cur.id);
-      toast(`📚 Auto-bookmarked + Resource: ${cur.resource}`);
-      // show resource
-      outEl.innerText += `\n\n📖 Learn: ${cur.resource}\n🔖 Bookmarked to Revise Dungeon (forgetting curve: revise tomorrow)`;
-    } else {
-      toast(`❌ Failed - ${3-state.fails[cur.id]} tries left before bookmark`);
-    }
-    save();
-  }
-  renderStats();
-}
-function getHint(){
-  if(!cur) return;
-  if(state.fails[cur.id]>=2 || confirm('Use hint -5 XP?')){
-    state.xp=Math.max(0,state.xp-5); save();
-    toast('💡 Hint: '+cur.hint);
-    document.getElementById('output').innerText='💡 Hint: '+cur.hint + '\n\nResource: '+cur.resource;
-  } else toast('Try 2 more fails to unlock free hint');
-}
-function bookmarkCurrent(){
-  if(!cur) return;
-  if(!state.bookmarks.includes(cur.id)){ state.bookmarks.push(cur.id); save(); toast('🔖 Bookmarked - will appear in Revise Dungeon tomorrow');}
-  else toast('Already bookmarked');
-}
-function nextBattle(){
-  const r=getBattleById(state.curB);
-  if(!r) return;
-  const battles=r.l.battles;
-  const idx=battles.findIndex(x=>x.id===state.curB);
-  if(idx < battles.length-1) selectBattle(battles[idx+1].id);
-  else {
-    // next level
-    const w=worlds.find(x=>x.id===state.curW);
-    const lIdx=w.levels.findIndex(x=>x.id===state.curL);
-    if(lIdx < w.levels.length-1) selectLevel(w.levels[lIdx+1].id);
-    else toast('🏆 World clear! Rank up - next world unlocking...');
+    toast('Not yet — check output and try again. Hint helps.');
   }
 }
-function prevBattle(){
-  const r=getBattleById(state.curB);
-  if(!r) return;
-  const battles=r.l.battles;
-  const idx=battles.findIndex(x=>x.id===state.curB);
-  if(idx>0) selectBattle(battles[idx-1].id);
-}
+function getHint(){ if(cur) { document.getElementById('output').innerText='💡 Hint: '+cur.prob.hint; } }
+function showSolution(){ if(cur) { document.getElementById('output').innerText='Example:\n'+cur.prob.solution; } }
+function toast(m){ const t=document.createElement('div'); t.innerText=m; t.style.position='fixed';t.style.bottom='20px';t.style.left='50%';t.style.transform='translateX(-50%)';t.style.background='#1f2340';t.style.color='white';t.style.padding='10px 16px';t.style.borderRadius='10px';t.style.zIndex=50; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
 function toggleMusic(){
-  const a=document.getElementById('lofi');
-  const b=document.getElementById('musicBtn');
-  if(a.paused){ a.volume=0.25; a.play().catch(()=>toast('Tap again to allow audio')); b.innerText='🎵 Lo-fi: ON'; b.style.background='var(--accent)'; b.style.color='white'; }
-  else { a.pause(); b.innerText='🎵 Lo-fi: OFF'; b.style.background=''; b.style.color=''; }
+  const a=document.getElementById('lofi'); const b=document.getElementById('mBtn');
+  if(a.paused){ a.volume=0.2; a.play().catch(()=>toast('Tap again to allow audio')); b.innerText='🎵 On'; }
+  else { a.pause(); b.innerText='🎵 Off'; }
 }
-function playSfx(ok){
-  try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const o=ctx.createOscillator(); const g=ctx.createGain();
-    o.type='sine'; o.frequency.value=ok?880:180; o.connect(g); g.connect(ctx.destination);
-    g.gain.setValueAtTime(0.15,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.3);
-    o.start(); o.stop(ctx.currentTime+0.3);
-  }catch(e){}
+function confettiEffect(){
+  const c=document.getElementById('confetti'); c.classList.add('show'); const ctx=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight;
+  let parts=[...Array(60)].map(()=>({x:Math.random()*c.width, y:-20, vx:(Math.random()-0.5)*6, vy:Math.random()*6+4, r:Math.random()*6+3, col:`hsl(${260+Math.random()*60},90%,60%)`}));
+  let id=setInterval(()=>{
+    ctx.clearRect(0,0,c.width,c.height);
+    parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.2; ctx.fillStyle=p.col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); });
+    if(parts[0].y> c.height+20){ clearInterval(id); c.classList.remove('show'); ctx.clearRect(0,0,c.width,c.height); }
+  },16);
 }
-function setTheme(t){
-  document.documentElement.setAttribute('data-theme', t==='default'?'':t);
-  document.querySelectorAll('.theme').forEach(x=>x.classList.remove('active'));
-  event.target.classList.add('active');
-  toast('Theme: '+t);
-}
-function resetProgress(){
-  if(confirm('Reset all progress (rank, XP, bookmarks)?')){
-    localStorage.removeItem('pa_state'); location.reload();
-  }
-}
-// init streak
-(() =>{
-  const today=new Date().toDateString();
-  if(state.lastDate!==today){
-    // check if yesterday? simplified streak++
-    state.streak++;
-    state.lastDate=today;
-    // notification simulation
-    if(Notification && Notification.permission==='granted') new Notification('Python Ascension', {body:'🔥 Streak '+state.streak+' - 15 min quest ready!'});
-    save();
-  }
-  if(Notification && Notification.permission==='default') Notification.requestPermission();
-})();
-
-// initial render
-renderAll();
+render();
 </script>
 </body>
 </html>
