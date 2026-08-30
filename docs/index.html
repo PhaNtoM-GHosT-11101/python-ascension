@@ -3,116 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python Mastery - Play & Learn</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>Python Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 <style>
-:root{--bg:#f8f7ff;--card:#ffffff;--card2:#f1f0ff;--border:#e6e4ff;--accent:#7c3aed;--accent2:#06b6d4;--success:#10b981;--danger:#ef4444;--text:#1f2340;--muted:#6b7280}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-button{font-family:inherit}
-.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-weight:800;font-size:18px}
-.logo span{color:var(--accent)}
-.xp{flex:1;max-width:360px;background:var(--card2);height:10px;border-radius:999px;overflow:hidden}
-.xp-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:22%;transition:width .4s}
-.pill{padding:6px 12px;border-radius:999px;background:var(--card2);border:1px solid var(--border);font-size:12px;font-weight:700}
-.hero{text-align:center;padding:28px 16px}
-.hero h1{font-size:28px;font-weight:800}
-.hero p{color:var(--muted);max-width:520px;margin:8px auto;font-size:14px}
-.path{max-width:720px;margin:0 auto;padding:0 16px 40px;display:flex;flex-direction:column;align-items:center;gap:0}
-.node{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center}
-.node-line{width:4px;height:40px;background:var(--border)}
-.node-line.done{background:var(--success)}
-.node-btn{width:72px;height:72px;border-radius:50%;border:4px solid var(--border);background:var(--card);display:grid;place-items:center;font-size:28px;cursor:pointer;transition:all .15s;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
-.node-btn.active{border-color:var(--accent);transform:scale(1.05);box-shadow:0 8px 20px rgba(124,58,237,0.25)}
-.node-btn.done{background:var(--success);border-color:var(--success);color:white}
-.node-btn.locked{opacity:.45;cursor:not-allowed;background:var(--card2)}
-.node-label{margin-top:8px;text-align:center}
-.node-label b{font-size:13px}
-.node-label span{font-size:11px;color:var(--muted);display:block}
-.node-xp{margin-top:6px;font-size:11px;background:var(--accent);color:white;padding:3px 8px;border-radius:999px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:40}
+body{font-family:'Nunito',sans-serif;background:#f8f7ff;color:#1f2340;min-height:100vh}
+.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e6e4ff;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-size:20px;font-weight:900}
+.logo span{color:#7c3aed}
+.xp-wrap{flex:1;min-width:120px}
+.xp-bar{height:10px;background:#ede9fe;border-radius:999px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#06b6d4);width:22%;border-radius:999px;transition:width .4s}
+.xp-label{font-size:12px;font-weight:700;margin-top:3px}
+.pill{padding:6px 12px;border-radius:999px;background:#ede9fe;border:1px solid #e6e4ff;font-size:12px;font-weight:700;display:inline-flex;gap:4px;align-items:center}
+.btn{padding:10px 16px;border-radius:12px;border:none;font-weight:800;cursor:pointer;font-size:14px;font-family:inherit}
+.btn-primary{background:#7c3aed;color:#fff}
+.btn-green{background:#10b981;color:#fff}
+.btn-ghost{background:#f3f3f3;color:#333}
+.hero{text-align:center;padding:28px 16px 16px}
+.hero h1{font-size:30px;font-weight:900;line-height:1.2}
+.hero h1 span{color:#7c3aed}
+.hero p{color:#6b7280;max-width:460px;margin:8px auto 14px;font-size:14px}
+.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.level-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding:0 16px 24px;max-width:900px;margin:0 auto}
+.lv{background:#fff;border:2px solid #e6e4ff;border-radius:16px;padding:16px;cursor:pointer;transition:all .15s;text-align:center}
+.lv:hover{border-color:#7c3aed;transform:translateY(-2px);box-shadow:0 8px 20px rgba(124,58,237,0.12)}
+.lv.done{border-color:#10b981;background:#f0fdf4}
+.lv.locked{opacity:.4;cursor:not-allowed;background:#f7f7fb}
+.lv-emoji{font-size:28px}
+.lv-name{font-weight:800;font-size:13px;margin-top:4px}
+.lv-xp{font-size:11px;color:#7c3aed;font-weight:700;margin-top:4px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.3);display:none;align-items:center;justify-content:center;padding:16px;z-index:40}
 .modal.open{display:flex}
-.sheet{width:100%;max-width:860px;max-height:92vh;overflow:auto;background:var(--card);border-radius:18px;border:1px solid var(--border);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
-.sheet-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:1}
-.sheet-body{padding:16px 18px;display:grid;gap:16px}
-.lesson{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:13px;line-height:1.6}
-.lesson pre{background:#0b0b14;color:#e5e7eb;padding:12px;border-radius:8px;overflow:auto;margin:8px 0}
-.badge{font-size:10px;padding:4px 8px;border-radius:999px;background:var(--accent);color:white;font-weight:800}
-.tests{display:grid;gap:6px}
-.test{padding:8px 10px;border-radius:8px;background:var(--card2);border:1px solid var(--border);font-size:12px}
-.test.ok{border-color:var(--success);background:#ecfdf5}
-.test.fail{border-color:var(--danger);background:#fef2f2}
-.editor-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.editor-bar{padding:8px 12px;background:var(--card2);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-#editor{height:260px}
-.output{background:#0b0b14;color:#10b981;padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;min-height:56px;white-space:pre-wrap}
-.btn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);font-weight:800;cursor:pointer}
-.btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
-.btn-success{background:var(--success);color:white;border-color:var(--success)}
+.sheet{width:100%;max-width:860px;max-height:92vh;background:#fff;border-radius:18px;overflow:auto;box-shadow:0 20px 40px rgba(0,0,0,0.12)}
+.sheet-head{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.sheet-body{padding:16px}
+.lesson{background:#f8f7ff;border:1px solid #e6e4ff;border-radius:12px;padding:14px;font-size:14px;line-height:1.6}
+.lesson pre{background:#1f2340;color:#e5e7eb;padding:12px;border-radius:8px;overflow:auto;margin:8px 0}
+.prob{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:14px;margin:12px 0}
+.prob-title{font-weight:800;color:#c2410c}
+.tests{display:grid;gap:6px;margin-top:10px}
+.test{padding:8px 10px;border-radius:8px;background:#f3f3f3;font-size:12px}
+.test.ok{border:1px solid #10b981;background:#ecfdf5}
+.test.fail{border:1px solid #ef4444;background:#fef2f2}
+.editor-wrap{border:1px solid #e6e4ff;border-radius:12px;overflow:hidden;margin-top:12px}
+.editor-bar{padding:8px 12px;background:#f8f7ff;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid #eee}
+#editor{height:240px}
+.output{background:#1f2340;color:#10b981;padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;min-height:56px;white-space:pre-wrap}
+.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .confetti{position:fixed;inset:0;pointer-events:none;display:none}
 .confetti.show{display:block}
-@media(max-width:600px){.hero h1{font-size:22px}#editor{height:220px}}
+.tutorial{background:linear-gradient(90deg,#7c3aed,#06b6d4);color:#fff;border-radius:16px;padding:20px;margin:16px;text-align:center}
+.tutorial b{font-size:18px}
+.tutorial p{opacity:.9;margin-top:6px;font-size:14px}
+@media(max-width:600px){.hero h1{font-size:24px}#editor{height:200px}.level-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 <div class="top">
   <div class="logo">Python <span>Mastery</span></div>
-  <div style="display:flex;gap:8px;align-items:center;flex:1;max-width:380px">
-    <div class="xp"><div id="xpBar" class="xp-bar"></div></div>
-    <span style="font-size:12px;font-weight:800;white-space:nowrap" id="xpText">0/100 XP • Lv 1</span>
+  <div class="xp-wrap">
+    <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
+    <div class="xp-label" id="xpLabel">0 / 100 XP • Lv 1</div>
   </div>
-  <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-    <span class="pill" id="streak">🔥 1 day</span>
-    <span class="pill" id="solved">0/500 done</span>
-    <button class="pill" onclick="toggleMusic()" id="mBtn">🎵 Off</button>
-  </div>
-</div>
-
-<div class="hero">
-  <h1>Learn by playing</h1>
-  <p>Short lesson → code it → get XP. 15 minutes a day. No boring lectures.</p>
-  <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-    <span class="pill">✨ Simple</span><span class="pill">🎮 Game</span><span class="pill">🐍 Python A-Z</span>
+  <div style="display:flex;gap:6px">
+    <span class="pill" id="streak">🔥 1</span>
+    <span class="pill" id="solved">0 done</span>
   </div>
 </div>
 
-<div class="path" id="path"></div>
+<div class="tutorial">
+  <b>Welcome to Python Mastery</b>
+  <p>Read the lesson → write code → press Submit. <b>10 levels to start</b>, 490 more unlock as you play.</p>
+</div>
 
-<div class="modal" id="modal" onclick="if(event.target===this) closeModal()">
+<div class="level-grid" id="grid"></div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="sheet">
     <div class="sheet-head">
-      <div><b id="mTitle">Level 1</b><div id="mSub" style="font-size:11px;color:#6b7280">Variables</div></div>
-      <div style="display:flex;gap:8px">
-        <span id="mXp" class="badge">+20 XP</span>
-        <button class="btn" onclick="closeModal()">✕</button>
+      <div><b id="mTitle" style="font-size:16px">Level 1</b></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="mXp" class="pill" style="background:#ede9fe;color:#7c3aed">+20 XP</span>
+        <button class="btn btn-ghost" onclick="closeModal()">✕</button>
       </div>
     </div>
     <div class="sheet-body">
       <div id="mLesson" class="lesson"></div>
-      <div>
-        <div style="font-weight:800;margin-bottom:6px" id="mProbTitle"></div>
-        <div style="font-size:13px;color:#4b5563" id="mProbDesc"></div>
-        <div class="tests" id="mTests" style="margin-top:10px"></div>
+      <div class="prob">
+        <div class="prob-title" id="mProbTitle">Your task</div>
+        <div id="mProbDesc" style="margin-top:6px"></div>
       </div>
+      <div class="tests" id="mTests"></div>
       <div class="editor-wrap">
         <div class="editor-bar">
-          <span style="font-weight:800;font-size:12px">Your code</span>
+          <span style="font-weight:700;font-size:12px">code.py</span>
           <span style="display:flex;gap:6px">
-            <button class="btn" style="padding:6px 10px" onclick="resetCode()">Reset</button>
-            <button class="btn" style="padding:6px 10px" onclick="runCode()">▶ Run</button>
-            <button class="btn btn-primary" style="padding:6px 12px" onclick="submitCode()">Submit</button>
+            <button class="btn btn-ghost" onclick="resetCode()">Reset</button>
+            <button class="btn btn-ghost" onclick="runCode()">▶ Run</button>
+            <button class="btn btn-primary" onclick="submitCode()">Submit</button>
           </span>
         </div>
         <div id="editor"></div>
-        <div id="output" class="output">Output shows here. Python loads in 2 sec...</div>
+        <div id="output" class="output">Press Run or Submit</div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" onclick="getHint()">💡 Hint</button>
-        <button class="btn" onclick="showSolution()">Show example</button>
-        <span style="font-size:11px;color:#6b7280;align-self:center" id="hintText">Stuck? Use Hint, no penalty first time.</span>
+      <div class="actions">
+        <button class="btn btn-ghost" onclick="showHint()">💡 Hint</button>
+        <button class="btn btn-ghost" onclick="showSolution()">See answer</button>
+        <span style="font-size:12px;color:#6b7280;align-self:center" id="hintText">Stuck? Try a hint — no penalty first time.</span>
       </div>
     </div>
   </div>
@@ -122,171 +122,107 @@ button{font-family:inherit}
 <audio id="lofi" loop preload="none" src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_fbd14dd6bc.mp3?filename=lofi-study-112191.mp3"></audio>
 
 <script>
-// DATA - Simple normal language, 500 total plan but show path clean
 const levels = [
-  {id:'l1', title:'Variables', emoji:'①', desc:'Store values', xp:20, lesson:`<b>Variables store values.</b><br><br><pre>x = 10\nname = "Ava"\nprint(x)</pre>Tip: <code>a = 5</code> then <code>print(a)</code> shows 5.`, prob:{title:'Create a variable', desc:'Create variable <b>a = 10</b> and print it.', starter:'# create a = 10\n', hint:'a = 10 then print(a)', solution:'a=10\nprint(a)', tests:[{exp:'10\n', vis:true}]}},
-  {id:'l2', title:'Fix the bug', emoji:'②', desc:'Find the mistake', xp:25, lesson:`<b>Types matter.</b> "5" is text, 5 is number. Can't add text + number.<br><pre>int("5") → 5</pre>`, prob:{title:'Fix it', desc:'This code crashes. Fix it to print <b>10</b>.', starter:'x = "5"\ny = 5\nprint(x + y)\n', hint:'Change x + y to int(x) + y', solution:'x="5"\ny=5\nprint(int(x)+y)', tests:[{exp:'10\n', vis:true}]}},
-  {id:'l3', title:'Your name', emoji:'③', desc:'Use text', xp:20, lesson:`<b>f-strings</b> make text easy.<br><pre>name = "Sam"\nprint(f"Hi {name}")</pre>`, prob:{title:'Say hi', desc:'Make <code>name = "Shadow"</code> then print <code>Hi Shadow</code>', starter:'name = ""\n', hint:'name = "Shadow"', solution:'name="Shadow"\nprint(f"Hi {name}")', tests:[{exp:'Hi Shadow\n', vis:true}]}},
-  {id:'l4', title:'Double it', emoji:'④', desc:'Read input', xp:30, lesson:`<b>input()</b> reads what user types.<br><pre>n = int(input())\nprint(n*2)</pre>If user types 7, it prints 14.`, prob:{title:'Double the number', desc:'Read a number and print double. (We test with 7 → 14)', starter:'# read n and print n*2\n', hint:'n = int(input())', solution:'n=int(input())\nprint(n*2)', tests:[{inp:'7\n', exp:'14\n', vis:true},{inp:'3\n', exp:'6\n', vis:false}]}},
-  {id:'l5', title:'Boss: Check type', emoji:'★', desc:'Final for World 1', xp:50, lesson:`<b>type() tells the type.</b><br><pre>s = "hi"\nprint(len(s), type(s).__name__)</pre>`, prob:{title:'Boss: Length + type', desc:'Read text and print <code>length type</code> . Example: "hello" → "5 str"', starter:'s = input()\n', hint:'print(f"{len(s)} {type(s).__name__}")', solution:'s=input()\nprint(f"{len(s)} {type(s).__name__}")', tests:[{inp:'hello\n', exp:'5 str\n', vis:true},{inp:'hi\n', exp:'2 str\n', vis:false}]}},
-  {id:'l6', title:'If / Else', emoji:'⑥', desc:'Make choices', xp:30, lesson:`<b>if</b> lets code decide.<br><pre>if n%2==0:\n  print("even")\nelse:\n  print("odd")</pre>`, prob:{title:'Even or odd?', desc:'Read n, print "even" or "odd"', starter:'n=int(input())\n', hint:'if n%2==0: print("even") else: print("odd")', solution:'n=int(input())\nprint("even" if n%2==0 else "odd")', tests:[{inp:'4\n', exp:'even\n', vis:true},{inp:'3\n', exp:'odd\n', vis:false}]}},
-  {id:'l7', title:'Loops', emoji:'⑦', desc:'Repeat', xp:30, lesson:`<b>for</b> repeats.<br><pre>for i in range(3):\n  print(i)</pre>`, prob:{title:'Print 1 to n', desc:'Read n, print 1..n each on new line. n=3 → 1 2 3', starter:'n=int(input())\n', hint:'for i in range(1,n+1): print(i)', solution:'n=int(input())\nfor i in range(1,n+1): print(i)', tests:[{inp:'3\n', exp:'1\n2\n3\n', vis:true}]}},
-  // placeholders to show path length but locked as coming soon
-  {id:'l8', title:'Functions', emoji:'⑧', desc:'Coming next', xp:30, locked:true},
-  {id:'l9', title:'Lists', emoji:'⑨', desc:'Coming next', xp:30, locked:true},
-  {id:'l10', title:'Dictionaries', emoji:'⑩', desc:'Coming next', xp:30, locked:true},
+  {id:'l1',name:'Variables',emoji:'🟢',xp:20,lesson:`<b>Variables store values.</b><pre>x = 10\nname = "Ava"\nprint(x)</pre>`,prob:{title:'Create a variable',desc:'Make <b>a = 10</b> and print it.',starter:'# your code\n',hint:'a = 10 then print(a)',solution:'a=10\nprint(a)',tests:[{exp:'10\n',vis:true}]}},
+  {id:'l2',name:'Fix it',emoji:'🟡',xp:25,lesson:`<b>Types:</b> "5" is text, 5 is number.<pre>int("5") + 5 → 10</pre>`,prob:{title:'Fix the bug',desc:'Code crashes. Fix to print <b>10</b>.',starter:'x = "5"\ny = 5\nprint(x + y)\n',hint:'Use int(x) + y',solution:'x="5"\ny=5\nprint(int(x)+y)',tests:[{exp:'10\n',vis:true}]}},
+  {id:'l3',name:'Say hi',emoji:'🔵',xp:20,lesson:`<b>f-strings:</b> `Hi {name}``<pre>name = "Sam"\nprint(f"Hi {name}")</pre>`,prob:{title:'Say hello',desc:'Print <code>Hi Shadow</code>',starter:'name = ""\n',hint:'name = "Shadow"',solution:'name="Shadow"\nprint(f"Hi {name}")',tests:[{exp:'Hi Shadow\n',vis:true}]}},
+  {id:'l4',name:'Double it',emoji:'🟣',xp:30,lesson:`<b>input()</b> reads text. <code>int()</code> makes it a number.<pre>n = int(input())\nprint(n*2)</pre>`,prob:{title:'Double the number',desc:'Read n, print n*2. We test with <b>7 → 14</b>.',starter:'# your code\n',hint:'n = int(input()) then print(n*2)',solution:'n=int(input())\nprint(n*2)',tests:[{inp:'7\n',exp:'14\n',vis:true},{inp:'3\n',exp:'6\n',vis:false}]}},
+  {id:'l5',name:'Boss',emoji:'🔴',xp:50,lesson:`<b>type()</b> tells the type.<pre>len("hi") → 2\ntype("hi").__name__ → "str"</pre>`,prob:{title:'Boss: length + type',desc:'Input text, print <code>length type</code> (e.g. "hello" → "5 str").',starter:'s = input()\n',hint:'print(f"{len(s)} {type(s).__name__}")',solution:'s=input()\nprint(f"{len(s)} {type(s).__name__}")',tests:[{inp:'hello\n',exp:'5 str\n',vis:true},{inp:'hi\n',exp:'2 str\n',vis:false}]}},
+  {id:'l6',name:'Even/Odd',emoji:'🟠',xp:30,lesson:`<b>if</b> makes choices.<pre>if n%2==0:\n  print("even")\nelse:\n  print("odd")</pre>`,prob:{title:'Even or odd?',desc:'Read n, print even or odd.',starter:'n=int(input())\n',hint:'if n%2==0: print("even") else: print("odd")',solution:'n=int(input())\nprint("even" if n%2==0 else "odd")',tests:[{inp:'4\n',exp:'even\n',vis:true},{inp:'3\n',exp:'odd\n',vis:false}]}},
+  {id:'l7',name:'Counting',emoji:'🟢',xp:30,lesson:`<b>for</b> repeats.<pre>for i in range(3):\n  print(i)</pre>`,prob:{title:'Print 1 to n',desc:'Read n, print 1..n on separate lines. n=3 → 1 2 3.',starter:'n=int(input())\n',hint:'for i in range(1,n+1): print(i)',solution:'n=int(input())\nfor i in range(1,n+1): print(i)',tests:[{inp:'3\n',exp:'1\n2\n3\n',vis:true}]}},
+  {id:'l8',name:'Functions',emoji:'🟡',xp:30,locked:false,lesson:`<b>def</b> creates reusable code.<pre>def greet(n):\n  print(f"Hi {n}")\ngreet("Sam")</pre>`,prob:{title:'Greet function',desc:'Write <b>greet(name)</b> that prints <code>Hi {name}</code>.',starter:'def greet(name):\n  # your code\n',hint:'print(f"Hi {name}") inside function',solution:'def greet(name):\n  print(f"Hi {name}")\ngreet("Python")',tests:[{exp:'Hi Python\n',vis:true}]}},
+  {id:'l9',name:'Lists',emoji:'🔵',xp:30,locked:true,lesson:`<b>Lists</b> store multiple items.<pre>li = [1,2,3]\nprint(li[0])  # 1</pre>`,prob:{title:'First element',desc:'Given list, print first item.',starter:'li = [10,20,30]\n',hint:'print(li[0])',solution:'li=[10,20,30]\nprint(li[0])',tests:[{exp:'10\n',vis:true}]}},
+  {id:'l10',name:'Dicts',emoji:'🟣',xp:35,locked:true,lesson:`<b>Dictionaries</b> store key:value pairs.<pre>d = {"a":1}\nprint(d["a"])  # 1</pre>`,prob:{title:'Dict lookup',desc:'Given d = {"x":42}, print the value of "x".',starter:'d = {"x":42}\n',hint:'print(d["x"])',solution:'d={"x":42}\nprint(d["x"])',tests:[{exp:'42\n',vis:true}]}},
 ];
 
-let state = JSON.parse(localStorage.getItem('pm_state')||'null') || {xp:0,lvl:1,done:[],streak:1,last:new Date().toDateString()};
-function save(){ localStorage.setItem('pm_state', JSON.stringify(state)); render(); }
-function rank(){ if(state.xp>=3500) return 'S'; if(state.xp>=2000) return 'A'; if(state.xp>=1200) return 'B'; if(state.xp>=600) return 'C'; if(state.xp>=200) return 'D'; return 'E'; }
-
+let state = JSON.parse(localStorage.getItem('pm_state')||'null')||{xp:0,lvl:1,done:[],streak:1,last:new Date().toDateString()};
+function save(){localStorage.setItem('pm_state',JSON.stringify(state));render()}
 function render(){
-  document.getElementById('xpBar').style.width = Math.min(100, (state.xp%100))+'%';
-  document.getElementById('xpText').innerText = `${state.xp} XP • Lv ${state.lvl} • Rank ${rank()}`;
-  document.getElementById('streak').innerText = `🔥 ${state.streak} day`;
-  document.getElementById('solved').innerText = `${state.done.length}/500 done`;
-  const path=document.getElementById('path');
-  path.innerHTML='';
+  document.getElementById('xpFill').style.width=Math.min(100,(state.xp%(state.lvl*100)))+'%';
+  document.getElementById('xpLabel').textContent=`${state.xp} XP • Lv ${state.lvl}`;
+  document.getElementById('streak').textContent=`🔥 ${state.streak}`;
+  document.getElementById('solved').textContent=`${state.done.length} done`;
+  const g=document.getElementById('grid');g.innerHTML='';
   levels.forEach((lv,i)=>{
-    const done = state.done.includes(lv.id);
-    const isNext = !done && (i===0 || state.done.includes(levels[i-1].id));
-    const locked = lv.locked || (!done && !isNext);
-    const lineClass = done ? 'done' : '';
-    path.innerHTML+=`
-      ${i>0?`<div class="node-line ${levels[i-1] && state.done.includes(levels[i-1].id)?'done':''}"></div>`:''}
-      <div class="node">
-        <button class="node-btn ${done?'done':''} ${locked?'locked':''} ${isNext?'active':''}" onclick="openLevel('${lv.id}')">
-          ${done?'✓':lv.emoji}
-        </button>
-        <div class="node-label"><b>${lv.title}</b><span>${lv.desc}</span></div>
-        <span class="node-xp">+${lv.xp} XP ${done?'• done':''}</span>
-      </div>
-    `;
+    const done=state.done.includes(lv.id);
+    const open=!done&&(i===0||state.done.includes(levels[i-1].id));
+    const locked=lv.locked||(!done&&!open);
+    const cls=done?'done':locked?'locked':'';
+    g.innerHTML+=`<div class="lv ${cls}" onclick="openLevel('${lv.id}')">
+      <div class="lv-emoji">${done?'✓':lv.emoji}</div>
+      <div class="lv-name">${lv.name}</div>
+      <div class="lv-xp">+${lv.xp} XP</div>
+    </div>`;
   });
-  // locked footer
-  path.innerHTML+=`<div class="node-line"></div><div style="padding:16px;background:var(--card);border:1px dashed var(--border);border-radius:12px;margin-top:12px;text-align:center;max-width:420px;width:100%"><b>490 more levels</b><div style="font-size:12px;color:#6b7280">Functions → OOP → Decorators → Async → DSA (150) → Graphs/DP → AI → FastAPI. Unlocks as you play.</div><div style="font-size:11px;margin-top:6px;color:var(--accent)">500 total • No overwhelm — one step at a time</div></div>`;
+  g.innerHTML+=`<div style="display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:13px;font-weight:700">+490 levels unlock as you go</div>`;
 }
-let cur=null;
-let pyodide=null;
-async function initPy(){
-  try{ pyodide=await loadPyodide(); document.getElementById('output').innerText='Ready — write code and press Run'; }catch(e){ document.getElementById('output').innerText='Python load failed: '+e}
-}
+let cur=null,pyodide=null,editor=null;
+async function initPy(){try{pyodide=await loadPyodide();document.getElementById('output').textContent='Ready — write code and press Submit';}catch(e){document.getElementById('output').textContent='Python load error: '+e}}
 initPy();
 require.config({paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'}});
-require(['vs/editor/editor.main'],()=>{ window.editor = monaco.editor.create(document.getElementById('editor'),{value:'# start\n',language:'python',theme:'vs',fontSize:13,minimap:{enabled:false},automaticLayout:true,wordWrap:'on'}); });
-
+require(['vs/editor/editor.main'],()=>{editor=monaco.editor.create(document.getElementById('editor'),{value:'# start\n',language:'python',theme:'vs',fontSize:14,minimap:{enabled:false},automaticLayout:true,wordWrap:'on'})});
 function openLevel(id){
-  const lv=levels.find(x=>x.id===id);
-  if(!lv) return;
-  if(lv.locked) return toast('Finish previous level to unlock');
-  const done=state.done.includes(id);
-  const nextIdx=levels.findIndex(x=>x.id===id);
-  const isNext = !done && (nextIdx===0 || state.done.includes(levels[nextIdx-1].id));
-  if(!done && !isNext && nextIdx!==0) return toast('Do previous level first');
+  const lv=levels.find(x=>x.id===id);if(!lv)return;
+  if(lv.locked)return;
+  if(state.done.includes(id)){toast('Already done — try for speed');return}
+  const i=levels.findIndex(x=>x.id===id);
+  if(!state.done.includes(id)&&i>0&&!state.done.includes(levels[i-1].id)){toast('Do previous level first');return}
   cur=lv;
-  document.getElementById('mTitle').innerText=lv.emoji+' '+lv.title;
-  document.getElementById('mSub').innerText=lv.desc+' • +'+lv.xp+' XP';
-  document.getElementById('mXp').innerText='+'+lv.xp+' XP';
+  document.getElementById('mTitle').textContent=lv.emoji+' '+lv.name;
+  document.getElementById('mXp').textContent='+'+lv.xp+' XP';
   document.getElementById('mLesson').innerHTML=lv.lesson;
-  document.getElementById('mProbTitle').innerText=lv.prob.title;
+  document.getElementById('mProbTitle').textContent=lv.prob.title;
   document.getElementById('mProbDesc').innerHTML=lv.prob.desc;
-  document.getElementById('mTests').innerHTML=lv.prob.tests.map((t,i)=>`<div class="test">${t.vis?`Example ${i+1}: expect <code>${esc(t.exp)}</code> ${t.inp?`from input <code>${esc(t.inp)}</code>`:''}`:`🔒 Hidden test ${i+1}`}</div>`).join('');
-  if(window.editor) window.editor.setValue(lv.prob.starter);
-  document.getElementById('output').innerText='Press Run to test';
+  document.getElementById('mTests').innerHTML=lv.prob.tests.map((t,j)=>`<div class="test">${t.vis?`Example ${j+1}: expect <code>${esc(t.exp)}</code>`:`🔒 Hidden test ${j+1}`}</div>`).join('');
+  if(editor)editor.setValue(lv.prob.starter);
+  document.getElementById('output').textContent='Press Run to test, Submit to finish';
   document.getElementById('modal').classList.add('open');
 }
-function closeModal(){ document.getElementById('modal').classList.remove('open'); }
-function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'↵'); }
-function resetCode(){ if(cur) window.editor.setValue(cur.prob.starter); }
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'↵')}
+function resetCode(){if(editor)editor.setValue(cur.prob.starter)}
 async function runCode(){
-  if(!pyodide) return toast('Python still loading...');
-  const code=window.editor.getValue();
-  const out=document.getElementById('output');
-  out.innerText='Running...';
-  try{
-    const sc=code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
-    const res=await pyodide.runPythonAsync(`
-import sys, io, traceback
-sys.stdout=io.StringIO()
-sys.stderr=io.StringIO()
+  if(!pyodide)return toast('Python still loading...');
+  const code=editor.getValue();
+  try{const sc=code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
+  const r=await pyodide.runPythonAsync(`
+import sys,io,traceback
+sys.stdout=io.StringIO();sys.stderr=io.StringIO()
 code="""${sc}"""
-try:
-    exec(code, {})
-    sys.stdout.getvalue() + sys.stderr.getvalue() or "No output — did you print?"
-except Exception:
-    traceback.format_exc()
-`);
-    out.innerText=res;
-  }catch(e){ out.innerText='Error: '+e; }
+try:exec(code,{});print(sys.stdout.getvalue()+sys.stderr.getvalue() or "No print — did you forget print?")
+except Exception:traceback.format_exc()`);
+  document.getElementById('output').textContent=r;}catch(e){document.getElementById('output').textContent='Error: '+e}
 }
 async function submitCode(){
-  if(!cur) return;
-  if(!pyodide) return toast('Wait for Python...');
-  const code=window.editor.getValue();
-  const out=document.getElementById('output');
-  out.innerText='Checking...';
-  let logs=[]; let ok=true;
-  for(let t of cur.prob.tests){
+  if(!cur||!pyodide)return;
+  const code=editor.getValue();document.getElementById('output').textContent='Checking...';
+  let ok=true,logs=[];
+  for(const t of cur.prob.tests){
     const sc=code.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
     const inp=(t.inp||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n');
-    const exp=t.exp;
-    try{
-      const res=await pyodide.runPythonAsync(`
-import sys, io, traceback, builtins
-_inputs="""${inp}""".splitlines(True)
-_it=iter(_inputs)
-def mock_input(prompt=""):
-    try: return next(_it).rstrip("\\n")
-    except: return ""
-builtins.input=mock_input
-sys.stdout=io.StringIO()
+    try{const r=await pyodide.runPythonAsync(`
+import sys,io,traceback,builtins
+_it="""${inp}""".splitlines(True).__iter__()
+def mi(p=""):try{return next(_it).rstrip("\\n")}except:return"""
+builtins.input=mi;sys.stdout=io.StringIO()
 code="""${sc}"""
-try:
-    exec(code, {})
-    sys.stdout.getvalue()
-except Exception:
-    traceback.format_exc()
-`);
-      const pass=res===exp;
-      logs.push((pass?'✅':'❌')+' '+(t.vis?'Example':'Hidden')+' '+(pass?'pass':`fail — got ${JSON.stringify(res)}`));
-      if(!pass) ok=false;
-    }catch(e){ logs.push('❌ error '+e); ok=false; }
-  }
-  out.innerText=logs.join('\n');
+try:exec(code,{});sys.stdout.getvalue()
+except Exception:traceback.format_exc()`);
+    const pass=r===t.exp;logs.push((pass?'✅':'❌')+' '+(t.vis?'Example':'Hidden')+': '+(pass?'pass':JSON.stringify(r)+' vs '+JSON.stringify(t.exp)));if(!pass)ok=false;
+  }catch(e){logs.push('❌ '+e);ok=false}
+  document.getElementById('output').textContent=logs.join('\n');
   if(ok){
-    if(!state.done.includes(cur.id)){
-      state.done.push(cur.id);
-      state.xp+=cur.xp;
-      if(state.xp >= state.lvl*100){ state.lvl++; toast(`Level up! Now Lv ${state.lvl}`); confettiEffect(); }
-      else toast(`+${cur.xp} XP!`);
-      // streak
-      const today=new Date().toDateString();
-      if(state.last!==today){ state.streak++; state.last=today; }
-      save();
-    } else toast('Already done — +0 XP but good practice!');
-    setTimeout(()=>{ closeModal(); render(); confettiEffect(); }, 800);
-  } else {
-    toast('Not yet — check output and try again. Hint helps.');
-  }
+    if(!state.done.includes(cur.id)){state.done.push(cur.id);state.xp+=cur.xp;if(state.xp>=state.lvl*100){state.lvl++;toast('Level up! 🎉 Lv '+state.lvl)}const today=new Date().toDateString();if(state.last!==today)state.streak++;save();}
+    else toast('Already done');
+    confetti();setTimeout(()=>{closeModal();render()},900);
+  }else{toast('Not yet — check output')}
 }
-function getHint(){ if(cur) { document.getElementById('output').innerText='💡 Hint: '+cur.prob.hint; } }
-function showSolution(){ if(cur) { document.getElementById('output').innerText='Example:\n'+cur.prob.solution; } }
-function toast(m){ const t=document.createElement('div'); t.innerText=m; t.style.position='fixed';t.style.bottom='20px';t.style.left='50%';t.style.transform='translateX(-50%)';t.style.background='#1f2340';t.style.color='white';t.style.padding='10px 16px';t.style.borderRadius='10px';t.style.zIndex=50; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
-function toggleMusic(){
-  const a=document.getElementById('lofi'); const b=document.getElementById('mBtn');
-  if(a.paused){ a.volume=0.2; a.play().catch(()=>toast('Tap again to allow audio')); b.innerText='🎵 On'; }
-  else { a.pause(); b.innerText='🎵 Off'; }
-}
-function confettiEffect(){
-  const c=document.getElementById('confetti'); c.classList.add('show'); const ctx=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight;
-  let parts=[...Array(60)].map(()=>({x:Math.random()*c.width, y:-20, vx:(Math.random()-0.5)*6, vy:Math.random()*6+4, r:Math.random()*6+3, col:`hsl(${260+Math.random()*60},90%,60%)`}));
-  let id=setInterval(()=>{
-    ctx.clearRect(0,0,c.width,c.height);
-    parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.2; ctx.fillStyle=p.col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); });
-    if(parts[0].y> c.height+20){ clearInterval(id); c.classList.remove('show'); ctx.clearRect(0,0,c.width,c.height); }
-  },16);
-}
+function showHint(){document.getElementById('output').textContent='💡 '+cur.prob.hint}
+function showSolution(){document.getElementById('output').textContent='Answer:\n'+cur.prob.solution}
+function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1f2340;color:#fff;padding:10px 16px;border-radius:10px;z-index:50;font-weight:700';document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+function toggleMusic(){const a=document.getElementById('lofi');const b=document.getElementById('mBtn');if(a.paused){a.volume=.2;a.play().catch(()=>{});document.getElementById('mBtn').textContent='🎵 On'}else{a.pause();document.getElementById('mBtn').textContent='🎵 Off'}}
+document.getElementById('mBtn').textContent='🎵 Off';
+function confetti(){const c=document.getElementById('confetti');c.classList.add('show');const ctx=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const ps=[...Array(60)].map(()=>({x:Math.random()*c.width,y:-20,vx:(Math.random()-.5)*6,vy:Math.random()*6+4,r:Math.random()*6+3,c:`hsl(${260+Math.random()*60},90%,60%)`}));let id=setInterval(()=>{ctx.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.2;ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});if(ps[0].y>c.height+20){clearInterval(id);c.classList.remove('show');ctx.clearRect(0,0,c.width,c.height)}},16)}
 render();
 </script>
 </body>
